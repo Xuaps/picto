@@ -6,8 +6,6 @@ _ReSharper.*
 *.user
 packages
 AppPackages
-*.pfx
-Package.appxmanifest
 Package.StoreAssociation.xml
 
 # mstest test results

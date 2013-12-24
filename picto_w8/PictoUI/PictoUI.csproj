@@ -12,10 +12,12 @@
     <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <PackageCertificateKeyFile>PictoUI_StoreKey.pfx</PackageCertificateKeyFile>
+    <PackageCertificateKeyFile>PictoUI_TemporaryKey.pfx</PackageCertificateKeyFile>
     <ExpressionBlendVersion>5.0.30709.0</ExpressionBlendVersion>
     <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
-    <PackageCertificateThumbprint>F1C260F36AB0E5D42A2967F29A9AFF9B63CED99D</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>3F687C520EB7060C22830B3811099492A0A11611</PackageCertificateThumbprint>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -152,14 +154,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="PictoUI_TemporaryKey.pfx" />
+    <PRIResource Include="Assets\Resources\es-es\Resources.resw" />
+    <PRIResource Include="Assets\Resources\en-us\Resources.resw" />
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    <PRIResource Include="Assets\Resources\es-es\Resources.resw" />
-    <PRIResource Include="Assets\Resources\en-us\Resources.resw" />
     <None Include="packages.config" />
-    <None Include="PictoUI_StoreKey.pfx" />
-    <None Include="PictoUI_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\badge.jpg" />
@@ -169,7 +170,6 @@
     <Content Include="Assets\splash.jpg" />
     <Content Include="Assets\storelogo.jpg" />
     <Content Include="Assets\wide.jpg" />
-    <None Include="Package.StoreAssociation.xml" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -219,6 +219,7 @@
     <VisualStudioVersion>11.0</VisualStudioVersion>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Package xmlns="http://schemas.microsoft.com/appx/2010/manifest">
+  <Identity Name="XuapsLabs.Picto" Publisher="CN=xuaps" Version="1.0.0.4" />
+  <Properties>
+    <DisplayName>Picto</DisplayName>
+    <PublisherDisplayName>Xuaps Labs</PublisherDisplayName>
+    <Logo>Assets\storelogo.jpg</Logo>
+  </Properties>
+  <Prerequisites>
+    <OSMinVersion>6.2.1</OSMinVersion>
+    <OSMaxVersionTested>6.2.1</OSMaxVersionTested>
+  </Prerequisites>
+  <Resources>
+    <Resource Language="x-generate" />
+  </Resources>
+  <Applications>
+    <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="PictoUI.App">
+      <VisualElements DisplayName="Picto" Logo="Assets\logo.jpg" SmallLogo="Assets\small.jpg" Description="PictoUI" ForegroundText="light" BackgroundColor="#464646">
+        <DefaultTile ShowName="allLogos" WideLogo="Assets\wide.jpg" />
+        <SplashScreen Image="Assets\splash.jpg" BackgroundColor="#005f32" />
+        <InitialRotationPreference>
+          <Rotation Preference="landscape" />
+        </InitialRotationPreference>
+      </VisualElements>
+    </Application>
+  </Applications>
+  <Capabilities>
+    <Capability Name="internetClient" />
+  </Capabilities>
+</Package>

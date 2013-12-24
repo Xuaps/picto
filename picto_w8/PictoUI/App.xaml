@@ -1,0 +1,28 @@
+﻿<Application
+    x:Class="PictoUI.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PictoUI" xmlns:common="using:PictoUI.Common"
+    >
+
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+
+                <!-- 
+                    Styles that define common aspects of the platform look and feel
+                    Required by Visual Studio project and item templates
+                 -->
+                <ResourceDictionary Source="Common/StandardStyles.xaml"/>
+                <ResourceDictionary Source="Common/Styles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <common:ResourceLoader x:Key="ResourceLoader"/>
+            <common:ViewModelLocator x:Key="ViewModelLocator" />
+            <common:BitmapImageConverter x:Key="BitmapImageConverter" />
+            <SolidColorBrush x:Key="ListViewItemSelectedBackgroundThemeBrush" Color="#FF005f32"/>
+            <SolidColorBrush x:Key="ListViewItemSelectedPointerOverBackgroundThemeBrush" Color="#FF005f32"/>
+            <SolidColorBrush x:Key="ListViewItemSelectedPointerOverBorderThemeBrush" Color="#FF005f32"/>
+            <common:ReverseNullSelectedItemToVisibilityConverter x:Key="ReverseNullSelectedItemToVisibilityConverter" />
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

@@ -1,0 +1,72 @@
+﻿<Page
+    x:Class="PictoUI.PictoGallery"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PictoUI"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    DataContext="{Binding PictoGalleryViewModel, Source={StaticResource ViewModelLocator}}">
+    <Page.Resources>
+        <Style x:Name="PictoButton" TargetType="Button">
+            <Setter Property="Template" Value="{StaticResource PictoTemplate}"/>
+        </Style>
+        <Style x:Name="Picto" TargetType="ListViewItem">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Button Command="{Binding ElementName=PictoList, Path=DataContext.SelectPicto}" CommandParameter="{Binding}"  Style="{StaticResource PictoButton}" Margin="0,0,0,15"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+    <Page.BottomAppBar>
+        <AppBar x:Name="BottomAppBar">
+            <Grid x:Name="SentenceBar">
+                <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
+                    <Button Command="{Binding DeleteAll}" Style="{StaticResource DiscardAppBarButtonStyle}" AutomationProperties.Name="{Binding DiscardButton, Source={StaticResource ResourceLoader}}"/>
+                    <Button Command="{Binding DeleteLast}"  Style="{StaticResource DeleteAppBarButtonStyle}" AutomationProperties.Name="{Binding DeleteButton, Source={StaticResource ResourceLoader}}"/>
+                </StackPanel>
+                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                    <Button  Click="Play" Style="{StaticResource PlayAppBarButtonStyle}" AutomationProperties.Name="{Binding PlayButton, Source={StaticResource ResourceLoader}}"/>
+                </StackPanel>
+            </Grid>
+        </AppBar>
+    </Page.BottomAppBar>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.15*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.05*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="1">
+        	<Grid.ColumnDefinitions>
+        		<ColumnDefinition Width="Auto"/>
+        		<ColumnDefinition/>
+        	</Grid.ColumnDefinitions>
+            <Button Style="{StaticResource BackButtonStyle}" Command="{Binding GoBack}" Margin="0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <TextBlock   Style="{StaticResource PageHeaderTextStyle}" Text="{Binding CategoryName}" Grid.Column="1" Margin="30,0,0,0" VerticalAlignment="Center"/>
+        </Grid>
+        <ScrollViewer Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" VerticalScrollMode="Disabled" >
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.05*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <ListView x:Name="PictoList" ItemsSource="{Binding Pictos}" Grid.Column="1" ItemContainerStyle="{Binding Mode=OneWay, Source={StaticResource Picto}}">
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate >
+                            <WrapGrid Orientation="Vertical" ItemHeight="227" ItemWidth="227" />
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+                </ListView>
+            </Grid>
+        </ScrollViewer>
+        <local:WordsPanel DataContext="{Binding Words}" Grid.Row="2" Grid.ColumnSpan="2" x:Name="sentence"/>
+    </Grid>
+</Page>

@@ -74,7 +74,7 @@ namespace PictoUI
             try
             {
                 await EnsureShell(args.PreviousExecutionState);
-                //await new InitialDataService().LoadInitialData();
+                await new InitialDataService().LoadInitialData();
 
                 ViewModelLocator.NavigationService.Navigate(typeof(Gallery));
                 shell.ProgressBar.Visibility=Visibility.Collapsed;

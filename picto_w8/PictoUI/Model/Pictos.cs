@@ -24,7 +24,7 @@ namespace PictoUI.Model
                 var children = await GetPictos(folder);
                 lock (list)
                 {
-                    list.Add(new Picto(children, folder.Name, "", folder.Path + "\\" + folder.Name + ".jpg"));                            
+                    list.Add(new Picto(children, folder.Name, "", folder.Path + "\\" + folder.Name + ".png"));                            
                 }
             }
             return list;
@@ -36,7 +36,7 @@ namespace PictoUI.Model
             return new ObservableCollection<Picto>(subfolders.Select(
                     subfolder =>
                     new Picto(null, subfolder.Name, subfolder.Path + "\\" + subfolder.Name + ".mp3",
-                              subfolder.Path + "\\" + subfolder.Name + ".jpg")));
+                              subfolder.Path + "\\" + subfolder.Name + ".png")));
         }
 
         public async Task<Picto> GetCategory(string categoryName)
@@ -94,7 +94,7 @@ namespace PictoUI.Model
                 folder = await parentFolder.CreateFolderAsync(text);
             }
 
-            var img = await image.CopyAsync(folder, text + ".jpg");
+            var img = await image.CopyAsync(folder, text + ".png");
             if (sound != null)
             {
                 var file = await sound.CopyAsync(folder, text + ".mp3");

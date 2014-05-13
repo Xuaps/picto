@@ -14,17 +14,20 @@ namespace PictoUI.Services
     {
         private readonly string _baseUrl;
         private readonly string[] _pictos;
+        private string _folderName;
 
         public InitialDataService()
         {
             if(CultureInfo.CurrentCulture.Parent.Name=="es")
             {
-                _baseUrl = "http://xuaps.com/pictos/es-es/";
-                _pictos=new []{"adios", "hola", "gracias", "de acuerdo"};
+                _baseUrl = "https://googledrive.com/host/0B2j1eTLysQsUVXI0YVpLN2VsajA/es-es/";
+                _pictos=new []{"asustado", "confundido", "curioso", "emocionado", "espantado"};
+                _folderName = "Emociones";
             }else
             {
-                _baseUrl = "http://xuaps.com/pictos/en-us/";
-                _pictos = new[] { "bye", "hello", "thank you", "ok" };
+                _baseUrl = "https://googledrive.com/host/0B2j1eTLysQsUVXI0YVpLN2VsajA/en-us/";
+                _pictos = new[] { "afraid", "confused", "curious", "excited", "scared" };
+                _folderName = "Emotions";
             }
         }
 
@@ -34,9 +37,9 @@ namespace PictoUI.Services
             {
                 var folder =
                     await
-                    ApplicationData.Current.LocalFolder.CreateFolderAsync("social", CreationCollisionOption.OpenIfExists);
+                    ApplicationData.Current.LocalFolder.CreateFolderAsync(_folderName, CreationCollisionOption.OpenIfExists);
                 
-                await CreateFile(folder, "social", "jpg", _baseUrl + "social/");
+                await CreateFile(folder, _folderName, "png", _baseUrl + _folderName+"/");
 
                 foreach (var picto in _pictos)
                 {
@@ -53,8 +56,8 @@ namespace PictoUI.Services
             var subfolder = await categoryFolder.CreateFolderAsync(picto, CreationCollisionOption.OpenIfExists);
 
 
-            CreateFile(subfolder, picto, "jpg", _baseUrl + categoryFolder.Name + "/" + subfolder.Name + "/");
-            CreateFile(subfolder, picto, "mp3", _baseUrl + categoryFolder.Name + "/" + subfolder.Name + "/");
+            CreateFile(subfolder, picto, "png", _baseUrl + categoryFolder.Name + "/");
+            //CreateFile(subfolder, picto, "mp3", _baseUrl + categoryFolder.Name + "/" + subfolder.Name + "/");
         }
 
         private async Task CreateFile(StorageFolder folder, string picto, string extension, string url)

@@ -202,11 +202,11 @@ namespace PictoUI.ViewModels
                     error += property + Environment.NewLine;
                 }
 
-                property = ValidatePicto("PictoSound");
+                /*property = ValidatePicto("PictoSound");
                 if (!string.IsNullOrEmpty(property))
                 {
                     error += property + Environment.NewLine;
-                }
+                }*/
 
                 return error.Trim();
             }

@@ -1,27 +1,32 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Package xmlns="http://schemas.microsoft.com/appx/2010/manifest">
-  <Identity Name="XuapsLabs.Picto" Publisher="CN=xuaps" Version="1.0.0.4" />
+<Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest">
+  <Identity Name="46192XuapsLabs.Picto" Publisher="CN=4A4A6510-9495-4476-8ABA-E3B5E70D6296" Version="1.1.0.4" />
   <Properties>
     <DisplayName>Picto</DisplayName>
     <PublisherDisplayName>Xuaps Labs</PublisherDisplayName>
     <Logo>Assets\storelogo.jpg</Logo>
   </Properties>
   <Prerequisites>
-    <OSMinVersion>6.2.1</OSMinVersion>
-    <OSMaxVersionTested>6.2.1</OSMaxVersionTested>
+    <OSMinVersion>6.3.0</OSMinVersion>
+    <OSMaxVersionTested>6.3.0</OSMaxVersionTested>
   </Prerequisites>
   <Resources>
     <Resource Language="x-generate" />
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="PictoUI.App">
-      <VisualElements DisplayName="Picto" Logo="Assets\logo.jpg" SmallLogo="Assets\small.jpg" Description="PictoUI" ForegroundText="light" BackgroundColor="#464646">
-        <DefaultTile ShowName="allLogos" WideLogo="Assets\wide.jpg" />
-        <SplashScreen Image="Assets\splash.jpg" BackgroundColor="#005f32" />
-        <InitialRotationPreference>
-          <Rotation Preference="landscape" />
-        </InitialRotationPreference>
-      </VisualElements>
+      <m2:VisualElements DisplayName="Picto" Description="PictoUI" BackgroundColor="#464646" ForegroundText="light" Square150x150Logo="Assets\logo.jpg" Square30x30Logo="Assets\small.jpg">
+        <m2:DefaultTile Wide310x150Logo="Assets\wide.jpg">
+          <m2:ShowNameOnTiles>
+            <m2:ShowOn Tile="square150x150Logo" />
+            <m2:ShowOn Tile="wide310x150Logo" />
+          </m2:ShowNameOnTiles>
+        </m2:DefaultTile>
+        <m2:InitialRotationPreference>
+          <m2:Rotation Preference="landscape" />
+        </m2:InitialRotationPreference>
+        <m2:SplashScreen BackgroundColor="#005f32" Image="Assets\splash.jpg" />
+      </m2:VisualElements>
     </Application>
   </Applications>
   <Capabilities>

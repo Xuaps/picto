@@ -1,6 +1,9 @@
 ﻿using System;
 using PictoUI.Model;
 using Windows.UI.Xaml.Controls;
+using  Windows.Media.SpeechSynthesis;
+using Windows.Storage;
+using System.Threading.Tasks;
 
 // The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
@@ -9,6 +12,7 @@ namespace PictoUI
     public sealed partial class WordsPanel : UserControl
     {
         private int index = 0;
+        private SpeechSynthesizer synth = new SpeechSynthesizer();
 
         public WordsPanel()
         {
@@ -36,21 +40,38 @@ namespace PictoUI
             PlayFrom(0);
         }
 
-        public void PlayFrom(int index)
+        public async void PlayFrom(int index)
         {
             if (sentence.Items.Count > index && index>-1)
             {
-                player.Source = new Uri((sentence.Items[index] as Picto).Sound);
+                var picto = (sentence.Items[index] as Picto);
+                
+                if(! await isFilePresent(picto.Sound)){
+                    SpeechSynthesisStream stream = await synth.SynthesizeTextToStreamAsync(picto.Text);
+                    player.SetSource(stream, stream.ContentType);
+                }else{
+                    player.Source = new Uri(picto.Sound);
+                }
+            }
+        }
+
+        public async Task<bool> isFilePresent(string fileName)
+        {
+            try
+            {
+                var st = await StorageFile.GetFileFromPathAsync(fileName);
+                return true;
+            }
+            catch
+            {
+                return false;
             }
         }
 
         void player_MediaEnded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             index++;
-            if (index < sentence.Items.Count)
-            {
-                player.Source = new Uri((sentence.Items[index] as Picto).Sound);
-            }
+            PlayFrom(index);
         }
     }
 }

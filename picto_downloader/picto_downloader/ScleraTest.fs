@@ -5,6 +5,7 @@ open Picto.Sclera
 open FSharp.Data
 open HtmlAgilityPack.FSharp
 open System.IO
+open System.Text
 
 [<TestFixture>]
 type ScleraTest() = 
@@ -19,6 +20,19 @@ type ScleraTest() =
 
     let forEach  action collection = 
         Array.ForEach collection
+    
+
+
+    let getImage url=
+        try
+            let stream="http://www.sclera.be/" + url
+                        |>Http.RequestStream
+                        |>(fun r->r.ResponseStream)
+            let mStream = new MemoryStream()
+            stream.CopyTo mStream
+            Convert.ToBase64String(mStream.ToArray())
+        with _ ->
+            "Error"
 
     [<Test>]
     member x.GetCategories() =
@@ -49,12 +63,9 @@ type ScleraTest() =
                                             |>Seq.toArray
                                             |>(fun c->{Tittle=cat.[0];Pictos=c}))
         
+        let outFile = new StreamWriter("pictos.csv")
         for i=0 to (Array.length categories)-1 do
-            Console.WriteLine categories.[i].Tittle
             for j=0 to (Array.length categories.[i].Pictos)-1 do
-                Console.WriteLine categories.[i].Pictos.[j].Tittle
-
-            //ignore (Directory.CreateDirectory categories.[i].Tittle) 
-
-
-    
+                for k=0 to (Array.length categories.[i].Pictos.[j].Images)-1 do
+                    let image = getImage categories.[i].Pictos.[j].Images.[k]
+                    outFile.WriteLine(sprintf "%s,%s,%s,%s" categories.[i].Tittle categories.[i].Pictos.[j].Tittle categories.[i].Pictos.[j].Images.[k] image)

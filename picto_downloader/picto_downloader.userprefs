@@ -2,23 +2,10 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.Workbench ActiveDocument="picto_downloader/Sclera.fs">
     <Files>
-      <File FileName="picto_downloader/ScleraTest.fs" Line="11" Column="1" />
-      <File FileName="picto_downloader/Sclera.fs" Line="23" Column="5" />
+      <File FileName="picto_downloader/ScleraTest.fs" Line="17" Column="171" />
+      <File FileName="picto_downloader/Sclera.fs" Line="32" Column="33" />
+      <File FileName="picto_downloader/HtmlAgilityPack.FSharp.fs" Line="78" Column="21" />
     </Files>
-    <Pads>
-      <Pad Id="ProjectPad">
-        <State expanded="True">
-          <Node name="picto_downloader" expanded="True">
-            <Node name="References" expanded="True" />
-            <Node name="Packages" expanded="True" />
-            <Node name="Sclera.fs" selected="True" />
-          </Node>
-        </State>
-      </Pad>
-      <Pad Id="MonoDevelop.NUnit.TestPad">
-        <State expanded="True" selected="True" />
-      </Pad>
-    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />

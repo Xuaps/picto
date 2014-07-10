@@ -4,9 +4,21 @@ open NUnit.Framework
 open Picto.Sclera
 open FSharp.Data
 open HtmlAgilityPack.FSharp
+open System.IO
 
 [<TestFixture>]
 type ScleraTest() = 
+
+    let getCategoriesPage =
+        "http://www.sclera.be/en/picto/cat_overview"
+        |>Http.RequestString
+    
+    let getCategoryPage cat pag =
+        "http://www.sclera.be/en/picto/" + cat + "/p/" + pag
+        |>Http.RequestString
+
+    let forEach  action collection = 
+        Array.ForEach collection
 
     [<Test>]
     member x.GetCategories() =
@@ -17,4 +29,32 @@ type ScleraTest() =
         let pictos = Pictos.getPictos "<html><head></head><body><div class='picto-by-name-list'><h3 class='picto-name'>seasons</h3><div class='group'><a href='/en/picto/detail/21353' class='picto-tTitle><span><img src='/resources/pictos/seizoenen%20t.png'></span></a></div><h3 class='picto-name'>sunday</h3><div class='group'><a href='/en/picto/detail/19083' class='picto-thumb'><span><img src='/resources/pictos/pellenberg/zondag%20t.png'></span></a><a href='/en/picto/detail/19047' class='picto-thumb'><span><img src='/resources/pictos/kleur/zondag blauw%20t.png'></span></a></div></div></body></html>"
         Assert.AreEqual("sunday", pictos.[1].Tittle)
         Assert.AreEqual([|"/resources/pictos/pellenberg/zondag.png";"/resources/pictos/kleur/zondag blauw.png"|], pictos.[1].Images)
+    
+    [<Test>]
+    member x.GetCategoryPageNumbers() =
+        Assert.AreEqual(["1";"2";"3";"4"], Pictos.getCategoryPages "<html><head></head><body><div class='paging'><p><a href='/en/picto/cat/1/p/1'>&lt; Previous</a> |<span class='current'>1</span> | <a href='/en/picto/cat/1/p/2'>2</a> | <a href='/en/picto/cat/1/p/3'>3</a> | <a href='/en/picto/cat/1/p/4'>4</a> | <a href='/en/picto/cat/1/p/2'>Next &gt;</a></p></div>  </body></html>")
+
+//    [<Test>]
+//    member x.GetCategoryWithPictos() = 
+//        Assert.AreEqual([{Tittle="Abstract";Pictos=[|{Tittle="sunday";Images=[|"/resources/pictos/pellenberg/zondag.png";"/resources/pictos/kleur/zondag blauw.png"|]}|]}],
+//            Pictos.getCategory [|"Abstract";"/cat/1"|])
+            
+    [<Test>]
+    member x.SavePictos() = 
+        let categories=getCategoriesPage
+                    |>Pictos.getCategories
+                    |>Array.map (fun cat-> Pictos.getCategoryPages(getCategoryPage cat.[1] "1")
+                                            |>Seq.map (fun n->Pictos.getPictos (getCategoryPage cat.[1] n))
+                                            |>Seq.concat
+                                            |>Seq.toArray
+                                            |>(fun c->{Tittle=cat.[0];Pictos=c}))
+        
+        for i=0 to (Array.length categories)-1 do
+            Console.WriteLine categories.[i].Tittle
+            for j=0 to (Array.length categories.[i].Pictos)-1 do
+                Console.WriteLine categories.[i].Pictos.[j].Tittle
+
+            //ignore (Directory.CreateDirectory categories.[i].Tittle) 
+
+
     

@@ -2,6 +2,7 @@
 
 open HtmlAgilityPack.FSharp
 open FSharp.Data
+open System
 
 let replace f (r:string) (s:string) = s.Replace(f, r)
 
@@ -10,7 +11,16 @@ type Picto = {
     Images: array<string>
 }
 
+type Category = {
+    Tittle: string;
+    Pictos: array<Picto>
+}
+
 type Pictos() =
+    static member isANumber string=
+        let (q,r) = Int32.TryParse string
+        r>0
+
     static member getCategoriesListPage  =
         "http://www.sclera.be/en/picto/cat_overview" 
         |> Http.AsyncRequestString
@@ -43,4 +53,20 @@ type Pictos() =
                                         |> Seq.toArray})
         |>Seq.toArray
 
+    static member getCategoryPages categoryPage = 
+        categoryPage
+        |>createDoc
+        |>descendants "div"
+        |>Seq.filter (hasClass "paging")
+        |>Seq.head
+        |> fun e-> [descendants "a" e ; descendants "span" e]
+        |>Seq.concat
+        |>Seq.filter (fun i->Pictos.isANumber (innerText i))
+        |>Seq.map innerText
+        |>Seq.sort
+        |>Seq.toList
 
+    static member getCategory cat = [||]
+        
+
+        

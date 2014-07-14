@@ -12,4 +12,19 @@ Package.StoreAssociation.xml
 TestResults
 
 #node
+=======
+# Build Folders (you can keep bin if you'd like, to store dlls and pdbs)
+bin
+obj
+_ReSharper.*
+*.suo
+*.user
+packages
+AppPackages
+Package.StoreAssociation.xml
+
+# mstest test results
+TestResults
+
+#node
 node_modules

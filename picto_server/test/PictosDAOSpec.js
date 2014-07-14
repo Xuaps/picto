@@ -1,0 +1,3 @@
+describe('Pictos DAO', function(){
+	
+});

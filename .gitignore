@@ -10,3 +10,6 @@ Package.StoreAssociation.xml
 
 # mstest test results
 TestResults
+
+#node
+node_modules

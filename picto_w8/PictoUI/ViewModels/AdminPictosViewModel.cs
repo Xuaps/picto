@@ -224,7 +224,7 @@ namespace PictoUI.ViewModels
                     return PictoName == null || new Regex(@"[\w -.]*").Match(PictoName).Length == PictoName.Length ? "" : _resourceLoader.InvalidName;
                 case "PictoNameUnique":
                     {
-                        return SelectedCategory==null || _pictosCollection.IsUnique(SelectedCategory.Text, PictoName) ? "" : _resourceLoader.UniqueName;
+                        return SelectedCategory==null || _pictosCollection.IsUnique(SelectedCategory.Key, PictoName) ? "" : _resourceLoader.UniqueName;
                     }
 
                 case "PictoImage":

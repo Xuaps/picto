@@ -122,7 +122,7 @@
     <Compile Include="Common\DelegateCommandBase.cs" />
     <Compile Include="Common\ResourceLoader.cs" />
     <Compile Include="Common\ReverseNullSelectedItemToVisibilityConverter.cs" />
-    <Compile Include="Common\StorageFileConverter.cs" />
+    <Compile Include="Common\Base64Converter.cs" />
     <Compile Include="Common\ViewModel.cs" />
     <Compile Include="Common\ViewModelLocator.cs" />
     <Compile Include="Dto\HomeDto.cs" />

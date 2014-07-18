@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Storage;
-using PictoTest;
+using PictoUI.Common;
 using SQLite;
 
 namespace PictoUI.Model
@@ -92,8 +92,8 @@ namespace PictoUI.Model
             var list=await GetList();
             var idParent = parent==null? (int?) null:parent.Id;
             var key = Guid.NewGuid().ToString();
-            var image64 = await StorageFileConverter.ConvertToBase64(image);
-            var sound64 = await StorageFileConverter.ConvertToBase64(sound);
+            var image64 = await Base64Converter.FromStorageFile(image);
+            var sound64 = await Base64Converter.FromStorageFile(sound);
 
             await _db.ExecuteScalarAsync<int>(
                         @"  insert into names(key, language, value) values(?,?,?);", key, _culture, text);

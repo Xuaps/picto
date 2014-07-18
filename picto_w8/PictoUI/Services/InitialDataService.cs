@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.Storage;
-using PictoTest;
 using PictoUI.Model;
 
 namespace PictoUI.Services

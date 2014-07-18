@@ -1,4 +1,5 @@
 ﻿using System;
+using PictoUI.Common;
 using PictoUI.Model;
 using Windows.UI.Xaml.Controls;
 using  Windows.Media.SpeechSynthesis;
@@ -46,25 +47,13 @@ namespace PictoUI
             {
                 var picto = (sentence.Items[index] as Picto);
                 
-                if(! await isFilePresent(picto.Sound)){
+                if(String.IsNullOrEmpty(picto.Sound)){
                     SpeechSynthesisStream stream = await synth.SynthesizeTextToStreamAsync(picto.Text);
                     player.SetSource(stream, stream.ContentType);
-                }else{
-                    player.Source = new Uri(picto.Sound);
+                }else
+                {
+                    player.SetSource(Base64Converter.ToStream(picto.Sound),"");
                 }
-            }
-        }
-
-        public async Task<bool> isFilePresent(string fileName)
-        {
-            try
-            {
-                var st = await StorageFile.GetFileFromPathAsync(fileName);
-                return true;
-            }
-            catch
-            {
-                return false;
             }
         }
 

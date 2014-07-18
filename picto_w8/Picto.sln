@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30501.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PictoUI", "PictoUI\PictoUI.csproj", "{0E8AC15A-DFC9-48E9-BEBE-9E626CC46809}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{39D1644A-4B33-4A2F-9C8E-55E3050DE66C}"
@@ -9,6 +11,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{39D164
 		.nuget\NuGet.exe = .nuget\NuGet.exe
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PictoTest", "PictoTest\PictoTest.csproj", "{98EB4679-25B1-4226-8A86-92D9EE3B9F22}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -22,9 +26,9 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{0E8AC15A-DFC9-48E9-BEBE-9E626CC46809}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0E8AC15A-DFC9-48E9-BEBE-9E626CC46809}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0E8AC15A-DFC9-48E9-BEBE-9E626CC46809}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{0E8AC15A-DFC9-48E9-BEBE-9E626CC46809}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{0E8AC15A-DFC9-48E9-BEBE-9E626CC46809}.Debug|Any CPU.Build.0 = Debug|x86
+		{0E8AC15A-DFC9-48E9-BEBE-9E626CC46809}.Debug|Any CPU.Deploy.0 = Debug|x86
 		{0E8AC15A-DFC9-48E9-BEBE-9E626CC46809}.Debug|ARM.ActiveCfg = Debug|ARM
 		{0E8AC15A-DFC9-48E9-BEBE-9E626CC46809}.Debug|ARM.Build.0 = Debug|ARM
 		{0E8AC15A-DFC9-48E9-BEBE-9E626CC46809}.Debug|ARM.Deploy.0 = Debug|ARM
@@ -46,6 +50,30 @@ Global
 		{0E8AC15A-DFC9-48E9-BEBE-9E626CC46809}.Release|x86.ActiveCfg = Release|x86
 		{0E8AC15A-DFC9-48E9-BEBE-9E626CC46809}.Release|x86.Build.0 = Release|x86
 		{0E8AC15A-DFC9-48E9-BEBE-9E626CC46809}.Release|x86.Deploy.0 = Release|x86
+		{98EB4679-25B1-4226-8A86-92D9EE3B9F22}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{98EB4679-25B1-4226-8A86-92D9EE3B9F22}.Debug|Any CPU.Build.0 = Debug|x86
+		{98EB4679-25B1-4226-8A86-92D9EE3B9F22}.Debug|Any CPU.Deploy.0 = Debug|x86
+		{98EB4679-25B1-4226-8A86-92D9EE3B9F22}.Debug|ARM.ActiveCfg = Debug|ARM
+		{98EB4679-25B1-4226-8A86-92D9EE3B9F22}.Debug|ARM.Build.0 = Debug|ARM
+		{98EB4679-25B1-4226-8A86-92D9EE3B9F22}.Debug|ARM.Deploy.0 = Debug|ARM
+		{98EB4679-25B1-4226-8A86-92D9EE3B9F22}.Debug|x64.ActiveCfg = Debug|x64
+		{98EB4679-25B1-4226-8A86-92D9EE3B9F22}.Debug|x64.Build.0 = Debug|x64
+		{98EB4679-25B1-4226-8A86-92D9EE3B9F22}.Debug|x64.Deploy.0 = Debug|x64
+		{98EB4679-25B1-4226-8A86-92D9EE3B9F22}.Debug|x86.ActiveCfg = Debug|x86
+		{98EB4679-25B1-4226-8A86-92D9EE3B9F22}.Debug|x86.Build.0 = Debug|x86
+		{98EB4679-25B1-4226-8A86-92D9EE3B9F22}.Debug|x86.Deploy.0 = Debug|x86
+		{98EB4679-25B1-4226-8A86-92D9EE3B9F22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98EB4679-25B1-4226-8A86-92D9EE3B9F22}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98EB4679-25B1-4226-8A86-92D9EE3B9F22}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{98EB4679-25B1-4226-8A86-92D9EE3B9F22}.Release|ARM.ActiveCfg = Release|ARM
+		{98EB4679-25B1-4226-8A86-92D9EE3B9F22}.Release|ARM.Build.0 = Release|ARM
+		{98EB4679-25B1-4226-8A86-92D9EE3B9F22}.Release|ARM.Deploy.0 = Release|ARM
+		{98EB4679-25B1-4226-8A86-92D9EE3B9F22}.Release|x64.ActiveCfg = Release|x64
+		{98EB4679-25B1-4226-8A86-92D9EE3B9F22}.Release|x64.Build.0 = Release|x64
+		{98EB4679-25B1-4226-8A86-92D9EE3B9F22}.Release|x64.Deploy.0 = Release|x64
+		{98EB4679-25B1-4226-8A86-92D9EE3B9F22}.Release|x86.ActiveCfg = Release|x86
+		{98EB4679-25B1-4226-8A86-92D9EE3B9F22}.Release|x86.Build.0 = Release|x86
+		{98EB4679-25B1-4226-8A86-92D9EE3B9F22}.Release|x86.Deploy.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

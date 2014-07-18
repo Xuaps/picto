@@ -32,9 +32,9 @@ namespace PictoUI.ViewModels
             Words.Add(selectedWord);
         }
 
-        private async void LoadPictos()
+        private async void LoadPictos(string key)
         {
-            var category = await _pictosCollection.GetCategory(CategoryName);
+            var category = await _pictosCollection.GetCategory(key);
             Pictos = category.Children;
             OnPropertyChanged("Pictos");
         }
@@ -47,7 +47,7 @@ namespace PictoUI.ViewModels
 
             CategoryName = data.Category;
             if(CategoryName!=null)
-                LoadPictos();
+                LoadPictos(data.Key);
             Words = data.Words;
         }
 

@@ -4,63 +4,71 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Storage;
+using PictoTest;
+using SQLite;
 
 namespace PictoUI.Model
 {
     public class Pictos : IPictos
     {
-        private ObservableCollection<Picto> list;
+        private ObservableCollection<Picto> _list;
+        private SQLiteAsyncConnection _db;
+        private string _culture;
+
+      
+
+        public Pictos()
+        {
+            _db = new SQLiteAsyncConnection("pictos.db");
+            _list = new ObservableCollection<Picto>();
+            _culture = "en";
+        }
+
+        private async Task<ObservableCollection<Picto>> GetList()
+        {
+            if (_list.Count == 0)
+            {
+                var categories =
+                    await
+                        _db.QueryAsync<Picto>(
+                            @"select pictos.id as Id, pictos.key as Key, names.value as Text, pictos.image as Image, pictos.sound as Sound  from pictos
+                            inner join names on names.key like pictos.key and names.language=? where pictos.id_parent is null",
+                            _culture);
+
+                foreach (var category in categories)
+                {
+                    var pictos = (await
+                        _db.QueryAsync<Picto>(@"select pictos.id as Id, pictos.key as Key, names.value as Text, pictos.image as Image, pictos.sound as Sound  from pictos
+                                inner join names on names.key like pictos.key and names.language=?
+                                where pictos.id_parent=?", _culture, category.Id))
+                        .Select(p => new Picto(p.Id,p.Key, p.Text, p.Image, p.Sound));
+                    _list.Add(new Picto(category.Id, category.Key, category.Text, category.Image,
+                        category.Sound, new ObservableCollection<Picto>(pictos)));
+                }
+            }
+            return _list;
+        }
 
         public async Task<ICollection<Picto>> GetCategories()
         {
-            if (list != null)
-                return list;
-                
-            list = new ObservableCollection<Picto>();       
-            var folders = await ApplicationData.Current.LocalFolder.GetFoldersAsync();
-
-            foreach (var folder in folders)
-            {
-                var children = await GetPictos(folder);
-                lock (list)
-                {
-                    list.Add(new Picto(children, folder.Name, "", folder.Path + "\\" + folder.Name + ".png"));                            
-                }
-            }
-            return list;
+            return await GetList();
         }
 
-        private async Task<ICollection<Picto>> GetPictos(StorageFolder folder)
+        public async Task<Picto> GetCategory(string categoryKey)
         {
-            var subfolders = await folder.GetFoldersAsync();
-            return new ObservableCollection<Picto>(subfolders.Select(
-                    subfolder =>
-                    new Picto(null, subfolder.Name, subfolder.Path + "\\" + subfolder.Name + ".mp3",
-                              subfolder.Path + "\\" + subfolder.Name + ".png")));
-        }
-
-        public async Task<Picto> GetCategory(string categoryName)
-        {
-            var categories = await GetCategories();
-            return categories.Single(c => c.Text == categoryName);
+            return (await GetList()).Single(c => c.Key == categoryKey);
         }
 
         public async Task DeleteCategory(Picto selectedCategory)
         {
-            var folder=await ApplicationData.Current.LocalFolder.GetFolderAsync(selectedCategory.Text);
-            await folder.DeleteAsync();
-
-            list.Remove(list.Single(c => c.Text == selectedCategory.Text));
+            await _db.ExecuteScalarAsync<int>("DELETE FROM PICTOS WHERE id_parent=? or id=?;", selectedCategory.Id, selectedCategory.Id);
+            (await GetList()).Remove(selectedCategory);
         }
 
         public async Task DeletePicto(Picto selectedCategory, Picto selectedPicto)
         {
-            var folder = await ApplicationData.Current.LocalFolder.GetFolderAsync(selectedCategory.Text);
-            var subfolder = await folder.GetFolderAsync(selectedPicto.Text);
-            await subfolder.DeleteAsync();
-
-            var sublist=list.Single(c => c.Text == selectedCategory.Text).Children;
-            sublist.Remove(sublist.Single(p => p.Text == selectedPicto.Text));
+            await _db.ExecuteScalarAsync<int>("DELETE FROM PICTOS WHERE id_parent=? and id=?;", selectedCategory.Id, selectedPicto.Id);
+            (await GetCategory(selectedCategory.Key)).Children.Remove(selectedPicto);
         }
 
         public bool IsUnique(string categoryName)
@@ -68,48 +76,46 @@ namespace PictoUI.Model
             if (string.IsNullOrEmpty(categoryName))
                 return true;
             
-            return list.All(f => f.Text != categoryName);
+            return GetList().Result.All(f => f.Text != categoryName);
         }
 
-        public bool IsUnique(string categoryName, string pictoName)
+        public bool IsUnique(string categoryKey, string pictoName)
         {
-            if (string.IsNullOrEmpty(categoryName) || string.IsNullOrEmpty(pictoName))
+            if (string.IsNullOrEmpty(categoryKey) || string.IsNullOrEmpty(pictoName))
                 return true;
             
-            return list.Single(f => f.Text != categoryName).Children.All(p=>p.Text!=pictoName);
+            return GetList().Result.Single(f => f.Key == categoryKey).Children.All(p=>p.Text!=pictoName);
         }
 
         public async Task<Picto> SavePicto(Picto parent, string text, StorageFile image, StorageFile sound)
         {
-            StorageFolder folder;
-            string sndPath="";
-            ObservableCollection<Picto> children = null;
-            if(parent==null)
-            {
-                folder=await ApplicationData.Current.LocalFolder.CreateFolderAsync(text);
-                children=new ObservableCollection<Picto>();
-            }else
-            {
-                var parentFolder = await ApplicationData.Current.LocalFolder.GetFolderAsync(parent.Text);
-                folder = await parentFolder.CreateFolderAsync(text);
-            }
+            var list=await GetList();
+            var idParent = parent==null? (int?) null:parent.Id;
+            var key = Guid.NewGuid().ToString();
+            var image64 = await StorageFileConverter.ConvertToBase64(image);
+            var sound64 = await StorageFileConverter.ConvertToBase64(sound);
 
-            var img = await image.CopyAsync(folder, text + ".png");
-            if (sound != null)
-            {
-                var file = await sound.CopyAsync(folder, text + ".mp3");
-                sndPath = file.Path;
-            }
+            await _db.ExecuteScalarAsync<int>(
+                        @"  insert into names(key, language, value) values(?,?,?);", key, _culture, text);
+            await _db.ExecuteScalarAsync<int>(
+                            @"insert into pictos (key, image, id_parent, sound) VALUES(?, ?,?,?);"
+                            ,key, image64, idParent, string.IsNullOrEmpty(sound64)?null:sound64);
+            var id =await _db.ExecuteScalarAsync<int>(@"select last_insert_rowid();");
 
-            var picto=new Picto(children, text, sndPath, img.Path);
-            if(parent==null)
-                list.Insert(0,picto);
+
+            Picto newPicto = null;
+            if (parent == null)
+            {
+                newPicto = new Picto(id, key, text, image64, sound64, new ObservableCollection<Picto>());
+                (await GetList()).Add(newPicto);
+            }
             else
             {
-                var p = list.Single(c => c.Text == parent.Text);                
-                p.Children.Add(picto);
+                newPicto = new Picto(id, key, text, image64, sound64);
+                (await GetCategories()).Single(c=>c.Key==parent.Key).Children.Add(newPicto);
             }
-            return picto;
+
+            return newPicto;
         }
     }
 }

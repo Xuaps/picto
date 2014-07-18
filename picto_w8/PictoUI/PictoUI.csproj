@@ -122,6 +122,7 @@
     <Compile Include="Common\DelegateCommandBase.cs" />
     <Compile Include="Common\ResourceLoader.cs" />
     <Compile Include="Common\ReverseNullSelectedItemToVisibilityConverter.cs" />
+    <Compile Include="Common\StorageFileConverter.cs" />
     <Compile Include="Common\ViewModel.cs" />
     <Compile Include="Common\ViewModelLocator.cs" />
     <Compile Include="Dto\HomeDto.cs" />
@@ -149,6 +150,8 @@
     </Compile>
     <Compile Include="Model\Picto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SQLite.cs" />
+    <Compile Include="SQLiteAsync.cs" />
     <Compile Include="ViewModels\AdminPictosViewModel.cs" />
     <Compile Include="ViewModels\GalleryViewModel.cs" />
     <Compile Include="ViewModels\PictoGalleryViewModel.cs" />
@@ -159,6 +162,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\pictos.db">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="PictoUI_StoreKey.pfx" />
     <None Include="PictoUI_TemporaryKey.pfx" />
     <PRIResource Include="Assets\Resources\es-es\Resources.resw" />
@@ -221,6 +227,14 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Messaging\Handlers\" />
+  </ItemGroup>
+  <ItemGroup>
+    <SDKReference Include="Microsoft.VCLibs, version=12.0">
+      <Name>Microsoft Visual C++ 2013 Runtime Package for Windows</Name>
+    </SDKReference>
+    <SDKReference Include="SQLite.WinRT81, Version=3.8.5">
+      <Name>SQLite for Windows Runtime %28Windows 8.1%29</Name>
+    </SDKReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>

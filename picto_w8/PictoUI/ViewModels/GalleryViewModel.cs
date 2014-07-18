@@ -50,9 +50,9 @@ namespace PictoUI.ViewModels
             get
             {
                 return
-                    new DelegateCommand<string>(
-                        (name) =>
-                        _navigationService.Navigate(typeof (PictoGallery), new HomeDto{Category = name, Words = this.Words}));
+                    new DelegateCommand<Picto>(
+                        (category) =>
+                        _navigationService.Navigate(typeof (PictoGallery), new HomeDto{Category = category.Text, Key = category.Key, Words = this.Words}));
             }
         }
 

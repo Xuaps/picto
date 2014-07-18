@@ -18,7 +18,7 @@ namespace PictoUI
             container.Register<IHub, MessageHub>(lifecycle: new SingletonLifecycle());
             container.Register<IDialogService, DialogService>();
 
-            container.Register<IPictos, Pictos>();
+            container.Register<IPictos, Pictos>(lifecycle: new SingletonLifecycle());
 
             RegisterHandlers(container);
 

@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using PictoUI.Common;
 using PictoUI.Model;
-using PictoUI.Services;
 using Windows.Storage;
 using Windows.UI.Xaml.Media.Imaging;
 

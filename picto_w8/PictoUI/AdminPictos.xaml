@@ -332,14 +332,14 @@
             </Grid.ColumnDefinitions>
             <ListView x:Name="listView" ItemsSource="{Binding Categories}" SelectedItem="{Binding SelectedCategory, Mode=TwoWay}"
                   ItemTemplate="{StaticResource PictoData}" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"  ItemContainerStyle="{StaticResource ListViewItemStyle1}" />
-            <ListView Grid.Column="1" ItemsSource="{Binding SelectedItem.Children, ElementName=listView}" ItemTemplate="{StaticResource PictoData}"
+            <GridView Grid.Column="1" ItemsSource="{Binding SelectedItem.Children, ElementName=listView}" ItemTemplate="{StaticResource PictoData}"
                       HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Background="#E5000000" Padding="10,10,0,0" SelectedItem="{Binding SelectedPicto, Mode=TwoWay}">
-                <ListView.ItemsPanel>
+                <GridView.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapGrid Orientation="Vertical" ItemHeight="250" ItemWidth="250" />
                     </ItemsPanelTemplate>
-                </ListView.ItemsPanel>
-            </ListView>
+                </GridView.ItemsPanel>
+            </GridView>
         </Grid>
         <Rectangle x:Name="rectBackgroundHide" Fill="#FF1D1D1D"  Stroke="Black"  Visibility="Collapsed" Opacity="0.7" Grid.ColumnSpan="3" Grid.RowSpan="3"/>
         <Popup  x:Name="popAddCategory">

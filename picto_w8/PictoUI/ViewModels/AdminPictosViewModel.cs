@@ -11,7 +11,7 @@ using Windows.UI.Xaml.Media.Imaging;
 
 namespace PictoUI.ViewModels
 {
-    public class AdminPictosViewModel:ViewModel
+    public class AdminPictosViewModel : ViewModel
     {
         private readonly IPictos _pictosCollection;
         private Picto _selectedCategory;
@@ -45,7 +45,7 @@ namespace PictoUI.ViewModels
             {
                 this.OnPropertyChanged("ErrorPicto");
                 this.OnPropertyChanged("IsValidPicto");
-                
+
             }
         }
 
@@ -79,7 +79,7 @@ namespace PictoUI.ViewModels
                 {
                     error += property + Environment.NewLine;
                 }
-                
+
                 return error.Trim();
             }
         }
@@ -89,17 +89,17 @@ namespace PictoUI.ViewModels
             switch (columnName)
             {
                 case "CategoryNameRequired":
-                    return string.IsNullOrEmpty(CategoryName) ?_resourceLoader.NameRequired : "";
+                    return string.IsNullOrEmpty(CategoryName) ? _resourceLoader.NameRequired : "";
                 case "CategoryNameValid":
-                    return CategoryName==null || new Regex(@"[\w -.]*").Match(CategoryName).Length==CategoryName.Length ? "" : _resourceLoader.InvalidName;
+                    return CategoryName == null || new Regex(@"[\w -.]*").Match(CategoryName).Length == CategoryName.Length ? "" : _resourceLoader.InvalidName;
                 case "CategoryNameUnique":
                     {
-                        return  _pictosCollection.IsUnique(CategoryName)? "" : _resourceLoader.UniqueName;
+                        return _pictosCollection.IsUnique(CategoryName) ? "" : _resourceLoader.UniqueName;
                     }
 
                 case "CategoryImage":
-                    return CategoryImage==null ? _resourceLoader.ImageRequired : "";
-                    
+                    return CategoryImage == null ? _resourceLoader.ImageRequired : "";
+
                 default:
                     return "";
             }
@@ -116,8 +116,9 @@ namespace PictoUI.ViewModels
         public string CategoryName
         {
             get { return _categoryName; }
-            set { 
-                _categoryName = value; 
+            set
+            {
+                _categoryName = value;
                 OnPropertyChanged("CategoryName");
             }
         }
@@ -136,7 +137,7 @@ namespace PictoUI.ViewModels
         private async Task ConvertToBitmapCategory(StorageFile sfile)
         {
             var stream = await sfile.OpenReadAsync();
-            var bitmap= new BitmapImage();
+            var bitmap = new BitmapImage();
             bitmap.SetSource(stream);
             CategoryBitmap = bitmap;
         }
@@ -144,8 +145,9 @@ namespace PictoUI.ViewModels
         public BitmapImage CategoryBitmap
         {
             get { return _pictoBitmap; }
-            set { 
-                _pictoBitmap = value; 
+            set
+            {
+                _pictoBitmap = value;
                 OnPropertyChanged("CategoryBitmap");
             }
         }
@@ -154,7 +156,7 @@ namespace PictoUI.ViewModels
         {
             get { return new AsyncDelegateCommand(AddCategoryAsync); }
         }
-        public ICommand DeleteCategory { get{return new AsyncDelegateCommand(DeleteCategoryAsync);} }
+        public ICommand DeleteCategory { get { return new AsyncDelegateCommand(DeleteCategoryAsync); } }
 
         private async Task DeleteCategoryAsync()
         {
@@ -163,7 +165,7 @@ namespace PictoUI.ViewModels
 
         async Task AddCategoryAsync()
         {
-            var picto = await _pictosCollection.SavePicto(null, CategoryName, CategoryImage,null);
+            var picto = await _pictosCollection.SavePicto(null, CategoryName, CategoryImage, null);
             SelectedCategory = picto;
 
             CategoryName = "";
@@ -222,7 +224,7 @@ namespace PictoUI.ViewModels
                     return PictoName == null || new Regex(@"[\w -.]*").Match(PictoName).Length == PictoName.Length ? "" : _resourceLoader.InvalidName;
                 case "PictoNameUnique":
                     {
-                        return _pictosCollection.IsUnique(CategoryName, PictoName) ? "" : _resourceLoader.UniqueName;
+                        return SelectedCategory==null || _pictosCollection.IsUnique(SelectedCategory.Text, PictoName) ? "" : _resourceLoader.UniqueName;
                     }
 
                 case "PictoImage":
@@ -276,8 +278,9 @@ namespace PictoUI.ViewModels
         public BitmapImage PictoBitmap
         {
             get { return _pictoBitmap; }
-            set { 
-                _pictoBitmap = value; 
+            set
+            {
+                _pictoBitmap = value;
                 OnPropertyChanged("PictoBitmap");
             }
         }
@@ -285,8 +288,8 @@ namespace PictoUI.ViewModels
         public string PictoName
         {
             get { return _pictoName; }
-            set 
-            { 
+            set
+            {
                 _pictoName = value;
                 OnPropertyChanged("PictoName");
             }
@@ -302,7 +305,7 @@ namespace PictoUI.ViewModels
 
         public async Task AddPictoAsync()
         {
-            var picto = await _pictosCollection.SavePicto(SelectedCategory, PictoName,PictoImage, PictoSound);
+            var picto = await _pictosCollection.SavePicto(SelectedCategory, PictoName, PictoImage, PictoSound);
             SelectedPicto = picto;
 
             PictoName = "";
@@ -323,22 +326,25 @@ namespace PictoUI.ViewModels
 
         public object IsAppBarOpen
         {
-            get { return SelectedCategory!=null; }
+            get { return SelectedCategory != null; }
         }
 
         public Picto SelectedPicto
         {
             get { return _selectedPicto; }
-            set { _selectedPicto = value;
-            OnPropertyChanged("IsAppBarOpen");
-            OnPropertyChanged("SelectedPicto");
+            set
+            {
+                _selectedPicto = value;
+                OnPropertyChanged("IsAppBarOpen");
+                OnPropertyChanged("SelectedPicto");
             }
         }
 
         public Picto SelectedCategory
         {
             get { return _selectedCategory; }
-            set { 
+            set
+            {
                 _selectedCategory = value;
                 OnPropertyChanged("IsAppBarOpen");
                 OnPropertyChanged("SelectedCategory");

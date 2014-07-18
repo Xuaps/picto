@@ -50,7 +50,7 @@
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate>
-									    <Button x:Name="button" Command="{Binding ElementName=CategoriesList, Path=DataContext.NavigateToPictos}" CommandParameter="{Binding Text}" VerticalAlignment="Stretch" Style="{StaticResource CategoryButton}"/>
+									    <Button x:Name="button" Command="{Binding ElementName=CategoriesList, Path=DataContext.NavigateToPictos}" CommandParameter="{Binding}" VerticalAlignment="Stretch" Style="{StaticResource CategoryButton}"/>
                                     </ControlTemplate>
                                 </Setter.Value>
                             </Setter>

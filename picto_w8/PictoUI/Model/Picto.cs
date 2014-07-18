@@ -1,19 +1,24 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Threading.Tasks;
 
 namespace PictoUI.Model
 {
     public class Picto
     {
         private ICollection<Picto> _children;
+        
+        public Picto()
+        {
+        }
 
-        public Picto(ICollection<Picto> children, string text, string sound, string image)
+        public Picto(int id, string key, string text, string image, string sound=null, ICollection<Picto> children=null)
         {
             _children = children;
             Text = text;
             Sound = sound;
             Image = image;
+            Key = key;
+            Id = id;
         }
 
         public Picto(string text)
@@ -27,7 +32,11 @@ namespace PictoUI.Model
             get { return _children; }
         }
 
-        public string Text { get; private set; }
+        public int Id { get; set; }
+
+        public string Key { get; set; }
+        
+        public string Text { get; set; }
 
         public string Sound { get; set; }
 

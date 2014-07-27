@@ -22,40 +22,84 @@ namespace PictoUI.Model
             _culture = CultureInfo.CurrentCulture.TwoLetterISOLanguageName;
         }
 
-        public async Task<ObservableCollection<Picto>> GetList()
+        public async Task Initialize()
         {
-            if (_list==null)
-            {
-                await _db.OpenAsync();
+            await _db.OpenAsync();
 
-                _list = new ObservableCollection<Picto>();
-                var stmt = await _db.PrepareStatementAsync(
-                            @"select pictos.id as Id, pictos.key as Key, names.value as Text, pictos.image as Image, 
+            _list = new ObservableCollection<Picto>();
+            var stmt = await _db.PrepareStatementAsync(
+                @"select pictos.id as Id, pictos.key as Key, names.value as Text, pictos.image as Image, 
                             pictos.sound as Sound, pictos.id_parent as Parent  from pictos
                             left outer join names on names.key = pictos.key and names.language=?
                             order by pictos.id_parent");
-                stmt.BindTextParameterAt(1, _culture);
+            stmt.BindTextParameterAt(1, _culture);
 
-                while (await stmt.StepAsync().AsTask().ConfigureAwait(false))
-                {
-                    var picto = new Picto(
-                        stmt.GetIntAt(0),
-                        stmt.GetTextAt(1),
-                        stmt.GetTextAt(2),
-                        stmt.GetTextAt(3),
-                        stmt.GetTextAt(4),
-                        stmt.GetIntAt(5)>0?null:new ObservableCollection<Picto>()
-                    );
+            while (await stmt.StepAsync().AsTask().ConfigureAwait(false))
+            {
+                AddPictoToList(stmt.GetIntAt(0),
+                                stmt.GetTextAt(1),
+                                stmt.GetTextAt(2),
+                                stmt.GetTextAt(3),
+                                stmt.GetTextAt(4),
+                                stmt.GetIntAt(5) > 0 ? _list.Single(p=>p.Id==stmt.GetIntAt(5)):null);
+            }
+        }
 
-                    if (picto.Children == null)
-                    {
-                        _list.Single(p => p.Id == stmt.GetIntAt(5)).Children.Add(picto);
-                    }
-                    else
-                    {
-                        _list.Add(picto);
-                    }
-                }
+        public async Task<Picto> SavePicto(Picto parent, string text, StorageFile image, StorageFile sound)
+        {
+            if (_list == null) await Initialize();
+            var idParent = parent == null ? (int?)null : parent.Id;
+            var key = Guid.NewGuid().ToString();
+            var image64 = await Base64Converter.FromStorageFile(image);
+            var sound64 = await Base64Converter.FromStorageFile(sound);
+
+            var ins_name = await _db.PrepareStatementAsync(
+                        @"  insert into names(key, language, value) values(?,?,?);");
+            ins_name.BindTextParameterAt(1, key);
+            ins_name.BindTextParameterAt(2, _culture);
+            ins_name.BindTextParameterAt(3, text);
+
+            await ins_name.StepAsync().AsTask().ConfigureAwait(false);
+
+            var ins_picto = await _db.PrepareStatementAsync(
+                            @"insert into pictos (key, image, id_parent, sound) VALUES(?, ?,?,?);");
+            ins_picto.BindTextParameterAt(1, key);
+            ins_picto.BindTextParameterAt(2, image64);
+            if (idParent != null)
+            {
+                ins_picto.BindIntParameterAt(3, idParent.Value);
+            }
+            else
+            {
+                ins_picto.BindNullParameterAt(3);
+            }
+            await ins_picto.StepAsync().AsTask().ConfigureAwait(false);
+            var id = (int)_db.GetLastInsertedRowId();
+
+            return AddPictoToList(id, key,text,image64, sound64, parent);
+        }
+
+        private Picto AddPictoToList(int id, string key, string text, string image, string sound,Picto parent)
+        {
+            var picto = new Picto(id, key, text, image, sound, parent==null?new ObservableCollection<Picto>() : null); 
+
+            if (parent != null)
+            {
+                parent.Children.Add(picto);
+            }
+            else
+            {
+                _list.Add(picto);
+            }
+
+            return picto;
+        }
+
+        private async Task<ObservableCollection<Picto>> GetList()
+        {
+            if (_list==null)
+            {
+                await Initialize();
             }
             return _list;
         }
@@ -103,53 +147,6 @@ namespace PictoUI.Model
                 return true;
             
             return GetList().Result.Single(f => f.Key == categoryKey).Children.All(p=>p.Text!=pictoName);
-        }
-
-        public async Task<Picto> SavePicto(Picto parent, string text, StorageFile image, StorageFile sound)
-        {
-            var list=await GetList();
-            var idParent = parent==null? (int?) null:parent.Id;
-            var key = Guid.NewGuid().ToString();
-            var image64 = await Base64Converter.FromStorageFile(image);
-            var sound64 = await Base64Converter.FromStorageFile(sound);
-
-            var ins_name=await _db.PrepareStatementAsync(
-                        @"  insert into names(key, language, value) values(?,?,?);");
-            ins_name.BindTextParameterAt(1, key);
-            ins_name.BindTextParameterAt(2, _culture);
-            ins_name.BindTextParameterAt(3, text);
-
-            await ins_name.StepAsync().AsTask().ConfigureAwait(false);
-
-            var ins_picto = await _db.PrepareStatementAsync(
-                            @"insert into pictos (key, image, id_parent, sound) VALUES(?, ?,?,?);");
-            ins_picto.BindTextParameterAt(1, key);
-            ins_picto.BindTextParameterAt(2,image64);
-            if (idParent != null)
-            {
-                ins_picto.BindIntParameterAt(3, idParent.Value);
-            }
-            else
-            {
-                ins_picto.BindNullParameterAt(3);
-            }
-            await ins_picto.StepAsync().AsTask().ConfigureAwait(false);
-            var id =(int)_db.GetLastInsertedRowId();
-
-
-            Picto newPicto = null;
-            if (parent == null)
-            {
-                newPicto = new Picto(id, key, text, image64, sound64, new ObservableCollection<Picto>());
-                (await GetList()).Add(newPicto);
-            }
-            else
-            {
-                newPicto = new Picto(id, key, text, image64, sound64);
-                (await GetCategories()).Single(c=>c.Key==parent.Key).Children.Add(newPicto);
-            }
-
-            return newPicto;
         }
     }
 }

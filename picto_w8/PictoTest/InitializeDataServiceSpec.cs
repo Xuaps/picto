@@ -25,7 +25,7 @@ namespace PictoTest
         [TestInitialize]
         public void Setup()
         {
-            initialDataService = new InitialDataService();
+            initialDataService = new InitialDataService(new Pictos());
         }
 
         [TestMethod]

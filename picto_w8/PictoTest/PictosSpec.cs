@@ -17,8 +17,8 @@ namespace PictoTest
         [TestInitialize]
         public void Initialize()
         {
-            new InitialDataService().LoadInitialData().Wait();
             pictos = new Pictos();
+            new InitialDataService(pictos).LoadInitialData().Wait();
         }
 
         [TestMethod]

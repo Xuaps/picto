@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using PictoUI.Common;
 using PictoUI.Messaging;
+using PictoUI.Model;
 using PictoUI.Services;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
@@ -74,7 +75,8 @@ namespace PictoUI
             try
             {
                 await EnsureShell(args.PreviousExecutionState);
-                await new InitialDataService().LoadInitialData();
+                var pictos = ViewModelLocator.Container.Resolve<IPictos>();
+                await new InitialDataService(pictos).LoadInitialData();
 
                 ViewModelLocator.NavigationService.Navigate(typeof(Gallery));
                 shell.ProgressBar.Visibility=Visibility.Collapsed;

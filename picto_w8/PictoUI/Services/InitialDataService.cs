@@ -8,6 +8,13 @@ namespace PictoUI.Services
 {
     public class InitialDataService
     {
+        private readonly IPictos _pictos;
+
+        public InitialDataService(IPictos pictos)
+        {
+            _pictos = pictos;
+        }
+
         public async Task LoadInitialData()
         {
             bool isDatabaseExisting = false;
@@ -27,15 +34,14 @@ namespace PictoUI.Services
                 StorageFile databaseFile = await Package.Current.InstalledLocation.GetFileAsync("assets\\pictos.db");
                 await databaseFile.CopyAsync(ApplicationData.Current.LocalFolder);
             }
-
+            await _pictos.Initialize();
             if (ApplicationData.Current.LocalSettings.Values.ContainsKey("Initialized"))
             {
                 var categories = await ApplicationData.Current.LocalFolder.GetFoldersAsync();
-                var pictosCollection = new Pictos();
 
                 foreach (var category in categories)
                 {
-                    var categoryObject=await pictosCollection.SavePicto(null, category.Name, await category.GetFileAsync(category.Name + ".png"), null);
+                    var categoryObject=await _pictos.SavePicto(null, category.Name, await category.GetFileAsync(category.Name + ".png"), null);
                     var pictos = await category.GetFoldersAsync();
                     foreach (var picto in pictos)
                     {
@@ -45,7 +51,7 @@ namespace PictoUI.Services
                             sound = await picto.GetFileAsync(picto.Name + ".mp3");
                         }
                         catch{}
-                        await pictosCollection.SavePicto(categoryObject, picto.Name, await picto.GetFileAsync(picto.Name + ".png"), sound);
+                        await _pictos.SavePicto(categoryObject, picto.Name, await picto.GetFileAsync(picto.Name + ".png"), sound);
                     }
                     await category.DeleteAsync();
                 }

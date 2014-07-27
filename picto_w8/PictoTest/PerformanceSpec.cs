@@ -22,7 +22,7 @@ namespace PictoTest
         {
             var pictos = new Pictos();
             var watch = Stopwatch.StartNew();
-            pictos.GetList().Wait();
+            pictos.Initialize().Wait();
             watch.Stop();
            
             Assert.IsTrue(watch.ElapsedMilliseconds<3500, watch.ElapsedMilliseconds+" - Excesive load time");

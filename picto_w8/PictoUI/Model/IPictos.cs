@@ -7,6 +7,7 @@ namespace PictoUI.Model
 {
     public interface IPictos
     {
+        Task Initialize();
         Task<ICollection<Picto>> GetCategories();
         Task<Picto> SavePicto(Picto parent, string text, StorageFile image, StorageFile sound);
         Task<Picto> GetCategory(string categoryName);

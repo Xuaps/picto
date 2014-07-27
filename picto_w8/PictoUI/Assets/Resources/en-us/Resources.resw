@@ -144,6 +144,9 @@
   <data name="DeleteButton" xml:space="preserve">
     <value>Delete</value>
   </data>
+  <data name="DevelopedBy" xml:space="preserve">
+    <value>Developed by </value>
+  </data>
   <data name="DiscardButton" xml:space="preserve">
     <value>Discard</value>
   </data>
@@ -170,6 +173,9 @@
   </data>
   <data name="PictoNameTittle" xml:space="preserve">
     <value>Picto name</value>
+  </data>
+  <data name="PictosBy" xml:space="preserve">
+    <value>Pictos privided by </value>
   </data>
   <data name="PictoTittle" xml:space="preserve">
     <value>Picto</value>

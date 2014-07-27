@@ -3,7 +3,7 @@
   <Identity Name="46192XuapsLabs.Picto" Publisher="CN=4A4A6510-9495-4476-8ABA-E3B5E70D6296" Version="1.2.0.6" />
   <Properties>
     <DisplayName>Picto</DisplayName>
-    <PublisherDisplayName>Xuaps Labs</PublisherDisplayName>
+    <PublisherDisplayName>Xuaps</PublisherDisplayName>
     <Logo>Assets\storelogo.jpg</Logo>
   </Properties>
   <Prerequisites>
@@ -23,13 +23,13 @@
           </m2:ShowNameOnTiles>
         </m2:DefaultTile>
         <m2:InitialRotationPreference>
+          <m2:Rotation Preference="portrait" />
           <m2:Rotation Preference="landscape" />
+          <m2:Rotation Preference="portraitFlipped" />
+          <m2:Rotation Preference="landscapeFlipped" />
         </m2:InitialRotationPreference>
         <m2:SplashScreen BackgroundColor="#005f32" Image="Assets\splash.jpg" />
       </m2:VisualElements>
     </Application>
   </Applications>
-  <Capabilities>
-    <Capability Name="internetClient" />
-  </Capabilities>
 </Package>

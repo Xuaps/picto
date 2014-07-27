@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Specialized;
+using Windows.UI;
+using Windows.UI.Xaml.Media;
 using PictoUI.Common;
 using PictoUI.ViewModels;
 using Windows.System;
@@ -51,8 +53,23 @@ namespace PictoUI
             var resourceLoader = new ResourceLoader();
             SettingsPane.GetForCurrentView().CommandsRequested += (s, e) =>
             {
+                // Add an About command
+                var about = new SettingsCommand("about", "About", (handler) =>
+                {
+                    var settings = new SettingsFlyout
+                    {
+                        Content = new About(),
+                        HeaderBackground = new SolidColorBrush(Color.FromArgb(255,0,95,51)),
+                        Background = new SolidColorBrush(Color.FromArgb(255, 255,255,255)),
+                        Title = "About",
+                    };
+
+                    settings.Show();
+                });
+                e.Request.ApplicationCommands.Add(about);
+
                 // Política de privacidad
-                SettingsCommand privacyPolicyCommand =
+                var privacyPolicyCommand =
                     new SettingsCommand("PrivacityPolicy", resourceLoader.PrivacityPolicyTittle, async (h)=>
                     {
                         await Launcher.LaunchUriAsync(resourceLoader.PrivacityPolicyUri);                                                   
@@ -60,21 +77,12 @@ namespace PictoUI
                 e.Request.ApplicationCommands.Add(privacyPolicyCommand);
 
                 // Contacta con nosotros
-                SettingsCommand contactUsCommand =
+                var contactUsCommand =
                     new SettingsCommand("ContactUs", resourceLoader.ContactUsTittle, async (h) =>
                     {
                         await Launcher.LaunchUriAsync(resourceLoader.ContactUsUri);
                     });
                 e.Request.ApplicationCommands.Add(contactUsCommand);
-            /*
-
-                var settingsCommand = new SettingsCommand("Preferences", "Preferences", (h) =>
-                {
-                    new MessageDialog("juas").ShowAsync();
-                });
-
-                e.Request.ApplicationCommands.Add(settingsCommand);
-             */
             };
         }
   

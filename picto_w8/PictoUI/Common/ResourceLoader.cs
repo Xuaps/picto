@@ -110,6 +110,16 @@ namespace PictoUI.Common
             get { return _resourceLoader.GetString("ContactUsTittle"); }
         }
 
+        public String DevelopedBy
+        {
+            get { return _resourceLoader.GetString("DevelopedBy"); }
+        }
+
+        public string PictosBy
+        {
+            get { return _resourceLoader.GetString("PictosBy"); }
+        }
+
         public Uri ContactUsUri
         {
             get { return new Uri(_resourceLoader.GetString("ContactUsUri")); }

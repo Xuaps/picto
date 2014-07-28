@@ -139,7 +139,7 @@
     <value>Contacte con nosotros</value>
   </data>
   <data name="ContactUsUri" xml:space="preserve">
-    <value>http://www.xuaps.com/contacte-con-nosotros/</value>
+    <value>http://www.xuaps.com/es/#contact</value>
   </data>
   <data name="DeleteButton" xml:space="preserve">
     <value>Borrar</value>
@@ -187,7 +187,7 @@
     <value>Política de privacidad</value>
   </data>
   <data name="PrivacityPolicyUri" xml:space="preserve">
-    <value>http://www.xuaps.com/politica-de-privacidad/</value>
+    <value>http://www.xuaps.com/es/privacy-policy.html</value>
   </data>
   <data name="SoundRequired" xml:space="preserve">
     <value>-El sonido es obligatorio</value>

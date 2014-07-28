@@ -139,7 +139,7 @@
     <value>Contact us</value>
   </data>
   <data name="ContactUsUri" xml:space="preserve">
-    <value>http://www.xuaps.com/contact-us/</value>
+    <value>http://xuaps.com/#contact</value>
   </data>
   <data name="DeleteButton" xml:space="preserve">
     <value>Delete</value>
@@ -187,7 +187,7 @@
     <value>Privacity Policy</value>
   </data>
   <data name="PrivacityPolicyUri" xml:space="preserve">
-    <value>http://www.xuaps.com/privacy-policy/</value>
+    <value>http://www.xuaps.com/privacy-policy.html</value>
   </data>
   <data name="SoundRequired" xml:space="preserve">
     <value>-Sound required</value>

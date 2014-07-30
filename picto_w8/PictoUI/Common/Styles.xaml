@@ -5,11 +5,11 @@
     <ControlTemplate x:Key="PictoTemplate">
         <Grid>
             <Grid.RowDefinitions>
+                <RowDefinition Height="3*"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="2*"/>
             </Grid.RowDefinitions>
-            <Border Grid.Row="1" Background="#B2DEEFF5">
-                <TextBlock Text="{Binding Text}" Style="{StaticResource GroupHeaderTextStyle}" HorizontalAlignment="Right" VerticalAlignment="Top" Foreground="{StaticResource ComboBoxSelectedBackgroundThemeBrush}"/>
+            <Border Grid.Row="1" Background="#B2C6C73C">
+                <TextBlock Text="{Binding Text}" Style="{StaticResource ItemTextStyle}" HorizontalAlignment="Right" VerticalAlignment="Top" Foreground="#FF005E34"/>
             </Border>
             <Image Grid.Row="0" Grid.RowSpan="2" Source="{Binding Image, Converter={StaticResource BitmapImageConverter}}" Stretch="UniformToFill" HorizontalAlignment="Center" Canvas.ZIndex="-1"/>
         </Grid>

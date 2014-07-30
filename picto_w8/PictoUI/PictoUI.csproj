@@ -183,7 +183,9 @@
     <Content Include="Assets\fondo.jpg" />
     <Content Include="Assets\logo.jpg" />
     <Content Include="Assets\small.jpg" />
-    <Content Include="Assets\splash.jpg" />
+    <Content Include="Assets\splash.scale-100.jpg" />
+    <Content Include="Assets\splash.scale-140.jpg" />
+    <Content Include="Assets\splash.scale-180.jpg" />
     <Content Include="Assets\storelogo.jpg" />
     <Content Include="Assets\wide.jpg" />
     <None Include="Package.StoreAssociation.xml" />

@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.Storage;
+using PictoUI.Common;
 using PictoUI.Model;
 
 namespace PictoUI.Services
@@ -41,17 +42,22 @@ namespace PictoUI.Services
 
                 foreach (var category in categories)
                 {
-                    var categoryObject=await _pictos.SavePicto(null, category.Name, await category.GetFileAsync(category.Name + ".png"), null);
+                    var categoryObject=await _pictos.SavePicto(null, new Picto{
+                            Text =category.Name, 
+                            Image = await Base64Converter.FromStorageFile(await category.GetFileAsync(category.Name + ".png"))});
                     var pictos = await category.GetFoldersAsync();
                     foreach (var picto in pictos)
                     {
-                        StorageFile sound=null;
+                        string sound=null;
                         try
                         {
-                            sound = await picto.GetFileAsync(picto.Name + ".mp3");
+                            sound = await Base64Converter.FromStorageFile(await picto.GetFileAsync(picto.Name + ".mp3"));
                         }
                         catch{}
-                        await _pictos.SavePicto(categoryObject, picto.Name, await picto.GetFileAsync(picto.Name + ".png"), sound);
+                        await _pictos.SavePicto(categoryObject, new Picto{
+                            Text = picto.Name, 
+                            Image = await Base64Converter.FromStorageFile(await picto.GetFileAsync(picto.Name + ".png")), 
+                            Sound = sound});
                     }
                     await category.DeleteAsync();
                 }

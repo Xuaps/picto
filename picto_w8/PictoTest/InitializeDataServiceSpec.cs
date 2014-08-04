@@ -93,7 +93,7 @@ namespace PictoTest
             var subfolder = await categoryFolder.CreateFolderAsync(picto, CreationCollisionOption.OpenIfExists);
 
 
-            CreateFile(subfolder, picto, "png", _baseUrl + categoryFolder.Name + "/");
+            CreateFile(subfolder, picto, "png", _baseUrl + categoryFolder.Name + "/").Wait();
             //CreateFile(subfolder, picto, "mp3", _baseUrl + categoryFolder.Name + "/" + subfolder.Name + "/");
         }
 

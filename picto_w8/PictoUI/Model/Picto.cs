@@ -5,15 +5,13 @@ namespace PictoUI.Model
 {
     public class Picto
     {
-        private ICollection<Picto> _children;
-        
         public Picto()
         {
         }
 
         public Picto(int id, string key, string text, string image, string sound=null, ICollection<Picto> children=null)
         {
-            _children = children;
+            Children = children;
             Text = text;
             Sound = sound;
             Image = image;
@@ -24,13 +22,10 @@ namespace PictoUI.Model
         public Picto(string text)
         {
             Text = text;
-            _children=new ObservableCollection<Picto>();
+            Children=new ObservableCollection<Picto>();
         }
 
-        public ICollection<Picto> Children
-        {
-            get { return _children; }
-        }
+        public ICollection<Picto> Children { get; set; }
 
         public int Id { get; set; }
 

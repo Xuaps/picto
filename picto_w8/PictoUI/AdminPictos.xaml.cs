@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using PictoUI.Common;
 using PictoUI.ViewModels;
 using Windows.Storage;
 using Windows.Storage.Pickers;
@@ -57,10 +58,16 @@ namespace PictoUI
             ShowPopup(popAddCategory);
         }
 
+        private async void EditCategory(object sender, RoutedEventArgs e)
+        {
+            ShowPopup(popAddCategory);
+            (DataContext as AdminPictosViewModel).LoadCategory();
+        }
+
         private async void SelectCategoryImage(object sender, RoutedEventArgs e)
         {
             var file = await SelectImage();
-            (DataContext as AdminPictosViewModel).CategoryImage = file;
+            (DataContext as AdminPictosViewModel).CategoryImage = await Base64Converter.FromStorageFile(file);
         }
 
         //picto
@@ -69,16 +76,22 @@ namespace PictoUI
             ShowPopup(popAddPicto);
         }
 
+        private async void EditPicto(object sender, RoutedEventArgs e)
+        {
+            ShowPopup(popAddPicto);
+            (DataContext as AdminPictosViewModel).LoadPicto();
+        }
+
         private async void SelectPictoImage(object sender, RoutedEventArgs e)
         {
             var file = await SelectImage();
-            (DataContext as AdminPictosViewModel).PictoImage = file;
+            (DataContext as AdminPictosViewModel).PictoImage = await Base64Converter.FromStorageFile(file);
         }
 
         private async void SelectPictoSound(object sender, RoutedEventArgs e)
         {
             var file = await SelectPictoSound();
-            (DataContext as AdminPictosViewModel).PictoSound = file;
+            (DataContext as AdminPictosViewModel).PictoSound = await Base64Converter.FromStorageFile(file);
         }
 
         //commons

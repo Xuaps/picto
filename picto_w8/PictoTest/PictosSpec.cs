@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
 using Windows.ApplicationModel;
-using Windows.Storage;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+using PictoUI.Common;
 using PictoUI.Model;
 using PictoUI.Services;
 
@@ -42,7 +41,15 @@ namespace PictoTest
         [TestMethod]
         public void is_unique_should_return_true_for_a_new_category_name()
         {
-            var res = pictos.IsUnique("Sexuality");
+            var res = pictos.IsUniqueCategory("Sexuality", null);
+
+            Assert.IsTrue(res);
+        }
+
+        [TestMethod]
+        public void is_unique_should_return_true_if_the_only_one_coincidence_is_itself()
+        {
+            var res = pictos.IsUniqueCategory("Sexuality -16", "sexuality_-16");
 
             Assert.IsTrue(res);
         }
@@ -50,22 +57,50 @@ namespace PictoTest
         [TestMethod]
         public void is_unique_return_false_for_a_existing_pictop_name_in_category()
         {
-            var res = pictos.IsUnique("sexuality_-16", "homosexual");
+            var res = pictos.IsUniquePicto("sexuality_-16", "homosexual", null);
 
             Assert.IsFalse(res);
+        }
+
+        [TestMethod]
+        public void is_unique_return_true_if_the_only_one_coincidence_is_itself()
+        {
+            var res = pictos.IsUniquePicto("sexuality_-16", "homosexual", "homosexual");
+
+            Assert.IsTrue(res);
         }
 
         [TestMethod]
         public void save_picto_should_add_new_picto_to_collection()
         {
             var category = pictos.GetCategories().Result.First();
-            var file = Package.Current.InstalledLocation.GetFileAsync("assets\\logo.jpg").AsTask().Result;
-            
-            pictos.SavePicto(category, "juarrrr", file, null).Wait();
+            var file = Base64Converter.FromStorageFile(Package.Current.InstalledLocation.GetFileAsync("assets\\logo.jpg").AsTask().Result).Result;
+
+            pictos.SavePicto(category, new Picto{Text="juarrrr", Image=file, Sound = ""}).Wait();
 
             var categoryCheck = new Pictos().GetCategory(category.Key).Result;
             Assert.AreEqual(127, categoryCheck.Children.Count);
             Assert.AreEqual(127, category.Children.Count);
+        }
+
+        [TestMethod]
+        public void save_picto_should_update_existing_picto()
+        {
+            var parent = pictos.GetCategories().Result.Single(c=>c.Key=="abstract");
+            var picto = parent.Children.Single(p=>p.Key=="1");
+            var modifidiedPicto = new Picto
+            {
+                Key = picto.Key,
+                Text = "test",
+                Image = picto.Image,
+                Sound = picto.Sound
+            };
+
+            pictos.SavePicto(parent, modifidiedPicto).Wait();
+
+            var pictoCheck = new Pictos().GetCategories().Result.Single(c => c.Key == "abstract").Children.Single(p => p.Key == "1");
+            Assert.AreEqual("test", parent.Children.Single(p => p.Key == "1").Text);            
+            Assert.AreEqual("test",pictoCheck.Text);
         }
 
         [TestMethod]

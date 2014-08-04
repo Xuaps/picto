@@ -28,6 +28,11 @@ namespace PictoUI.Common
             get { return _resourceLoader.GetString("EditButton"); } 
         }
 
+        public object Edit2Button
+        {
+            get { return _resourceLoader.GetString("Edit2Button"); }
+        }
+
         public object AdminTittle
         {
             get { return _resourceLoader.GetString("AdminTittle"); }

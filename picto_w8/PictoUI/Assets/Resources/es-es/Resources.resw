@@ -192,4 +192,10 @@
   <data name="SoundRequired" xml:space="preserve">
     <value>-El sonido es obligatorio</value>
   </data>
+  <data name="Edit2Button" xml:space="preserve">
+    <value>Editar</value>
+  </data>
+  <data name="Exception_UnhandledException" xml:space="preserve">
+    <value>El programa ha encontrado un problema y se va a cerrar.</value>
+  </data>
 </root>

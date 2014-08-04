@@ -375,7 +375,7 @@
                         <Button Style="{StaticResource PicturesAppBarButtonStyle}" Click="SelectPictoImage" />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <TextBox Width="300" Margin="0,10,0,0" Text="{Binding PictoSound.Name, Mode=TwoWay}" HorizontalAlignment="Left" IsEnabled="False"/>
+                        <TextBox Width="300" Margin="0,10,0,0" Text="{Binding PictoSoundName, Mode=TwoWay}" HorizontalAlignment="Left" IsEnabled="False"/>
                         <Button Style="{StaticResource AudioAppBarButtonStyle}" Click="SelectPictoSound" />
                     </StackPanel>
                     <TextBlock Text="{Binding ErrorPicto}" FontSize="20" Margin="0,10,0,0" Foreground="{StaticResource ListViewItemSelectedBackgroundThemeBrush}"/>
@@ -393,11 +393,13 @@
                 <TextBlock Text="{Binding CategoryTitle, Source={StaticResource ResourceLoader}}" FontFamily="Global User Interface" FontSize="33.333" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 <Button Style="{StaticResource AddAppBarButtonStyle}" AutomationProperties.Name="{Binding AddButton,Source={StaticResource ResourceLoader}}"  Click="AddCategory"/>
                 <StackPanel x:Name="CategoryPanel" Orientation="Horizontal" Visibility="{Binding SelectedCategory, Converter={StaticResource ReverseNullSelectedItemToVisibilityConverter}}" Margin="-30,0,0,0">
+                    <Button Style="{StaticResource EditAppBarButtonStyle}" AutomationProperties.Name="{Binding Edit2Button,Source={StaticResource ResourceLoader}}" Click="EditCategory"/>
                     <Button Style="{StaticResource DeleteAppBarButtonStyle}" AutomationProperties.Name="{Binding DeleteButton,Source={StaticResource ResourceLoader}}" Command="{Binding DeleteCategory}"/>
                     <Line X1="0" Y1="60"  Margin="0,10,20,0"  StrokeThickness="3" Stroke="White" ></Line>
                     <TextBlock Text="{Binding PictoTittle, Source={StaticResource ResourceLoader}}" FontFamily="Global User Interface" FontSize="33.333" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     <Button Style="{StaticResource AddAppBarButtonStyle}" AutomationProperties.Name="{Binding AddButton,Source={StaticResource ResourceLoader}}"  Click="AddPicto"/>
                     <StackPanel x:Name="PictoPanel" Orientation="Horizontal" Visibility="{Binding SelectedPicto, Converter={StaticResource ReverseNullSelectedItemToVisibilityConverter}}" Margin="-30,0,0,0">
+                        <Button Style="{StaticResource EditAppBarButtonStyle}" AutomationProperties.Name="{Binding Edit2Button,Source={StaticResource ResourceLoader}}" Click="EditPicto"/>
                         <Button Style="{StaticResource DeleteAppBarButtonStyle}" AutomationProperties.Name="{Binding DeleteButton,Source={StaticResource ResourceLoader}}" Command="{Binding DeletePicto}"/> 
                     </StackPanel>
                 </StackPanel>

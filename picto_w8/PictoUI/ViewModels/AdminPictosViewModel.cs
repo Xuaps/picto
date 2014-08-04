@@ -16,13 +16,16 @@ namespace PictoUI.ViewModels
         private Picto _selectedCategory;
         private Picto _selectedPicto;
         private string _categoryName;
-        private StorageFile _categoryImage;
-        private StorageFile _pictoSound;
-        private StorageFile _pictoImage;
+        private string _categoryImage;
+        private string _categoryKey;
+        private string _pictoSound;
+        private string _pictoImage;
+        private BitmapImage _pictoBitmap;
         private string _pictoName;
+        private string _pictoKey;
         private ICollection<Picto> _categories;
         private ResourceLoader _resourceLoader;
-        private BitmapImage _pictoBitmap;
+        
 
         public AdminPictosViewModel(IPictos pictosCollection)
         {
@@ -93,7 +96,7 @@ namespace PictoUI.ViewModels
                     return CategoryName == null || new Regex(@"[\w -.]*").Match(CategoryName).Length == CategoryName.Length ? "" : _resourceLoader.InvalidName;
                 case "CategoryNameUnique":
                     {
-                        return _pictosCollection.IsUnique(CategoryName) ? "" : _resourceLoader.UniqueName;
+                        return _pictosCollection.IsUniqueCategory(CategoryName, _categoryKey) ? "" : _resourceLoader.UniqueName;
                     }
 
                 case "CategoryImage":
@@ -122,23 +125,15 @@ namespace PictoUI.ViewModels
             }
         }
 
-        public StorageFile CategoryImage
+        public string CategoryImage
         {
             get { return _categoryImage; }
             set
             {
                 _categoryImage = value;
-                ConvertToBitmapCategory(value);
+                CategoryBitmap=value==null?null:Base64Converter.ToBitmap(value);
                 OnPropertyChanged("CategoryImage");
             }
-        }
-
-        private async Task ConvertToBitmapCategory(StorageFile sfile)
-        {
-            var stream = await sfile.OpenReadAsync();
-            var bitmap = new BitmapImage();
-            bitmap.SetSource(stream);
-            CategoryBitmap = bitmap;
         }
 
         public BitmapImage CategoryBitmap
@@ -164,7 +159,13 @@ namespace PictoUI.ViewModels
 
         async Task AddCategoryAsync()
         {
-            var picto = await _pictosCollection.SavePicto(null, CategoryName, CategoryImage, null);
+            var picto = await _pictosCollection.SavePicto(null, new Picto
+            {
+                Key = _categoryKey,
+                Text = CategoryName, 
+                Image = CategoryImage,
+                Sound = ""
+            });
             SelectedCategory = picto;
 
             CategoryName = "";
@@ -223,7 +224,7 @@ namespace PictoUI.ViewModels
                     return PictoName == null || new Regex(@"[\w -.]*").Match(PictoName).Length == PictoName.Length ? "" : _resourceLoader.InvalidName;
                 case "PictoNameUnique":
                     {
-                        return SelectedCategory==null || _pictosCollection.IsUnique(SelectedCategory.Key, PictoName) ? "" : _resourceLoader.UniqueName;
+                        return SelectedCategory==null || _pictosCollection.IsUniquePicto(SelectedCategory.Key, PictoName, _pictoKey) ? "" : _resourceLoader.UniqueName;
                     }
 
                 case "PictoImage":
@@ -245,7 +246,7 @@ namespace PictoUI.ViewModels
             }
         }
 
-        public StorageFile PictoSound
+        public string PictoSound
         {
             get { return _pictoSound; }
             set
@@ -255,23 +256,15 @@ namespace PictoUI.ViewModels
             }
         }
 
-        public StorageFile PictoImage
+        public string PictoImage
         {
             get { return _pictoImage; }
             set
             {
                 _pictoImage = value;
-                ConvertToBitmapPicto(value);
+                PictoBitmap = value==null?null:Base64Converter.ToBitmap(value);
                 OnPropertyChanged("PictoImage");
             }
-        }
-
-        private async Task ConvertToBitmapPicto(StorageFile sfile)
-        {
-            var stream = await sfile.OpenReadAsync();
-            var bitmap = new BitmapImage();
-            bitmap.SetSource(stream);
-            PictoBitmap = bitmap;
         }
 
         public BitmapImage PictoBitmap
@@ -304,7 +297,14 @@ namespace PictoUI.ViewModels
 
         public async Task AddPictoAsync()
         {
-            var picto = await _pictosCollection.SavePicto(SelectedCategory, PictoName, PictoImage, PictoSound);
+            var picto = await _pictosCollection.SavePicto(SelectedCategory, 
+                new Picto
+                {
+                    Key = _pictoKey,
+                    Text=PictoName, 
+                    Image= PictoImage, 
+                    Sound = PictoSound
+                });
             SelectedPicto = picto;
 
             PictoName = "";
@@ -353,6 +353,21 @@ namespace PictoUI.ViewModels
         private async void LoadCollections()
         {
             Categories = await _pictosCollection.GetCategories();
+        }
+
+        public void LoadCategory()
+        {
+            _categoryKey = _selectedCategory.Key;
+            CategoryName = _selectedCategory.Text;
+            CategoryImage = _selectedCategory.Image;
+        }
+
+        public void LoadPicto()
+        {
+            _pictoKey = _selectedPicto.Key;
+            PictoName = _selectedPicto.Text;
+            PictoImage = _selectedPicto.Image;
+            PictoSound = _selectedPicto.Sound;
         }
     }
 }

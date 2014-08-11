@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Windows.Storage.Streams;
 using PictoUI.Common;
 using PictoUI.ViewModels;
 using Windows.Storage;
@@ -20,6 +21,16 @@ namespace PictoUI
         public AdminPictos()
         {
             this.InitializeComponent();
+            (DataContext as AdminPictosViewModel).PropertyChanged += AdminPictos_PropertyChanged;
+        }
+
+        private void AdminPictos_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "PictoMusic")
+            {
+                Player.SetSource((DataContext as AdminPictosViewModel).PictoMusic, "");
+                Player.UpdateLayout();
+            }
         }
 
         //popup
@@ -74,12 +85,14 @@ namespace PictoUI
         private async void AddPicto(object sender, RoutedEventArgs e)
         {
             ShowPopup(popAddPicto);
+//            Player.SetSource((DataContext as AdminPictosViewModel).PictoMusic, "");
         }
 
         private async void EditPicto(object sender, RoutedEventArgs e)
         {
             ShowPopup(popAddPicto);
             (DataContext as AdminPictosViewModel).LoadPicto();
+//            Player.SetSource((DataContext as AdminPictosViewModel).PictoMusic,"");
         }
 
         private async void SelectPictoImage(object sender, RoutedEventArgs e)
@@ -92,6 +105,7 @@ namespace PictoUI
         {
             var file = await SelectPictoSound();
             (DataContext as AdminPictosViewModel).PictoSound = await Base64Converter.FromStorageFile(file);
+//            Player.SetSource((DataContext as AdminPictosViewModel).PictoMusic, "");
         }
 
         //commons

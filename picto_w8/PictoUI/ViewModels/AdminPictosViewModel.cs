@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Windows.Storage.Streams;
 using PictoUI.Common;
 using PictoUI.Model;
 using Windows.Storage;
@@ -19,13 +20,14 @@ namespace PictoUI.ViewModels
         private string _categoryImage;
         private string _categoryKey;
         private string _pictoSound;
+        private IRandomAccessStream _pictoMusic;
         private string _pictoImage;
         private BitmapImage _pictoBitmap;
         private string _pictoName;
         private string _pictoKey;
         private ICollection<Picto> _categories;
         private ResourceLoader _resourceLoader;
-        
+
 
         public AdminPictosViewModel(IPictos pictosCollection)
         {
@@ -131,7 +133,7 @@ namespace PictoUI.ViewModels
             set
             {
                 _categoryImage = value;
-                CategoryBitmap=value==null?null:Base64Converter.ToBitmap(value);
+                CategoryBitmap=String.IsNullOrEmpty(value)?null:Base64Converter.ToBitmap(value);
                 OnPropertyChanged("CategoryImage");
             }
         }
@@ -228,7 +230,7 @@ namespace PictoUI.ViewModels
                     }
 
                 case "PictoImage":
-                    return PictoImage == null ? _resourceLoader.ImageRequired : "";
+                    return String.IsNullOrEmpty(PictoImage) ? _resourceLoader.ImageRequired : "";
 
                 case "PictoSound":
                     return PictoSound == null ? _resourceLoader.SoundRequired : "";
@@ -252,7 +254,18 @@ namespace PictoUI.ViewModels
             set
             {
                 _pictoSound = value;
+                PictoMusic = String.IsNullOrEmpty(value) ? null : Base64Converter.ToStream(value);
                 OnPropertyChanged("PictoSound");
+            }
+        }
+
+        public IRandomAccessStream PictoMusic
+        {
+            get { return _pictoMusic; }
+            set
+            {
+                _pictoMusic = value;
+                OnPropertyChanged("PictoMusic");
             }
         }
 
@@ -262,7 +275,7 @@ namespace PictoUI.ViewModels
             set
             {
                 _pictoImage = value;
-                PictoBitmap = value==null?null:Base64Converter.ToBitmap(value);
+                PictoBitmap = String.IsNullOrEmpty(value) ? null : Base64Converter.ToBitmap(value);
                 OnPropertyChanged("PictoImage");
             }
         }

@@ -15,11 +15,12 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="PictoUI.App">
-      <m2:VisualElements DisplayName="Picto" Description="PictoUI" BackgroundColor="#464646" ForegroundText="light" Square150x150Logo="Assets\logo.jpg" Square30x30Logo="Assets\small.jpg">
-        <m2:DefaultTile Wide310x150Logo="Assets\wide.jpg">
+      <m2:VisualElements DisplayName="Picto" Description="Picto is a tool for alternative communication. Using pictograms, helps people with any kind of language disorders or impairments to communicate in a more effective way." BackgroundColor="#005f32" ForegroundText="light" Square150x150Logo="Assets\logo.jpg" Square30x30Logo="Assets\small.jpg">
+        <m2:DefaultTile Wide310x150Logo="Assets\wide.jpg" ShortName="Picto" Square310x310Logo="Assets\Square310x310Logo.png" DefaultSize="wide310x150Logo" Square70x70Logo="Assets\Square70x70Logo.jpg">
           <m2:ShowNameOnTiles>
             <m2:ShowOn Tile="square150x150Logo" />
             <m2:ShowOn Tile="wide310x150Logo" />
+            <m2:ShowOn Tile="square310x310Logo" />
           </m2:ShowNameOnTiles>
         </m2:DefaultTile>
         <m2:InitialRotationPreference>

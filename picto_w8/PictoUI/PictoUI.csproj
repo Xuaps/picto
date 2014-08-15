@@ -166,9 +166,16 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\BadgeLogo.scale-100.jpg" />
+    <Content Include="Assets\logo.scale-100.jpg" />
     <Content Include="Assets\pictos.db">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\small.scale-100.jpg" />
+    <Content Include="Assets\Square310x310Logo.scale-100.png" />
+    <Content Include="Assets\Square70x70Logo.scale-100.jpg" />
+    <Content Include="Assets\storelogo.scale-100.jpg" />
+    <Content Include="Assets\wide.scale-100.jpg" />
     <None Include="PictoUI_StoreKey.pfx" />
     <None Include="PictoUI_TemporaryKey.pfx" />
     <PRIResource Include="Assets\Resources\es-es\Resources.resw" />
@@ -179,15 +186,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Assets\badge.jpg" />
     <Content Include="Assets\fondo.jpg" />
-    <Content Include="Assets\logo.jpg" />
-    <Content Include="Assets\small.jpg" />
     <Content Include="Assets\splash.scale-100.jpg" />
     <Content Include="Assets\splash.scale-140.jpg" />
     <Content Include="Assets\splash.scale-180.jpg" />
-    <Content Include="Assets\storelogo.jpg" />
-    <Content Include="Assets\wide.jpg" />
     <None Include="Package.StoreAssociation.xml" />
   </ItemGroup>
   <ItemGroup>

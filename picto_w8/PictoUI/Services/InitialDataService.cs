@@ -44,11 +44,12 @@ namespace PictoUI.Services
                 {
                     var categoryObject=await _pictos.SavePicto(null, new Picto{
                             Text =category.Name, 
-                            Image = await Base64Converter.FromStorageFile(await category.GetFileAsync(category.Name + ".png"))});
+                            Image = await Base64Converter.FromStorageFile(await category.GetFileAsync(category.Name + ".png")),
+                            Sound = ""});
                     var pictos = await category.GetFoldersAsync();
                     foreach (var picto in pictos)
                     {
-                        string sound=null;
+                        string sound="";
                         try
                         {
                             sound = await Base64Converter.FromStorageFile(await picto.GetFileAsync(picto.Name + ".mp3"));

@@ -9,7 +9,7 @@ namespace PictoUI.Model
         {
         }
 
-        public Picto(int id, string key, string text, string image, string sound=null, ICollection<Picto> children=null)
+        public Picto(int id, string key, string text, string image, string sound="", ICollection<Picto> children=null)
         {
             Children = children;
             Text = text;

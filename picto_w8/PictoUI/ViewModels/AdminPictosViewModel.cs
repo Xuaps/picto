@@ -18,13 +18,11 @@ namespace PictoUI.ViewModels
         private Picto _selectedPicto;
         private string _categoryName;
         private string _categoryImage;
-        private string _categoryKey;
-        private string _pictoSound;
+        private string _pictoSound="";
         private IRandomAccessStream _pictoMusic;
         private string _pictoImage;
         private BitmapImage _pictoBitmap;
         private string _pictoName;
-        private string _pictoKey;
         private ICollection<Picto> _categories;
         private ResourceLoader _resourceLoader;
 
@@ -98,11 +96,11 @@ namespace PictoUI.ViewModels
                     return CategoryName == null || new Regex(@"[\w -.]*").Match(CategoryName).Length == CategoryName.Length ? "" : _resourceLoader.InvalidName;
                 case "CategoryNameUnique":
                     {
-                        return _pictosCollection.IsUniqueCategory(CategoryName, _categoryKey) ? "" : _resourceLoader.UniqueName;
+                        return _pictosCollection.IsUniqueCategory(CategoryName, CategoryKey) ? "" : _resourceLoader.UniqueName;
                     }
 
                 case "CategoryImage":
-                    return CategoryImage == null ? _resourceLoader.ImageRequired : "";
+                    return String.IsNullOrEmpty(CategoryImage) ? _resourceLoader.ImageRequired : "";
 
                 default:
                     return "";
@@ -116,6 +114,8 @@ namespace PictoUI.ViewModels
                 return string.IsNullOrEmpty(this.ErrorCategory);
             }
         }
+
+        public string CategoryKey { get; set; }
 
         public string CategoryName
         {
@@ -163,7 +163,7 @@ namespace PictoUI.ViewModels
         {
             var picto = await _pictosCollection.SavePicto(null, new Picto
             {
-                Key = _categoryKey,
+                Key = CategoryKey,
                 Text = CategoryName, 
                 Image = CategoryImage,
                 Sound = ""
@@ -173,6 +173,7 @@ namespace PictoUI.ViewModels
             CategoryName = "";
             CategoryImage = null;
             CategoryBitmap = null;
+            CategoryKey = null;
         }
 
         //picto
@@ -226,7 +227,7 @@ namespace PictoUI.ViewModels
                     return PictoName == null || new Regex(@"[\w -.]*").Match(PictoName).Length == PictoName.Length ? "" : _resourceLoader.InvalidName;
                 case "PictoNameUnique":
                     {
-                        return SelectedCategory==null || _pictosCollection.IsUniquePicto(SelectedCategory.Key, PictoName, _pictoKey) ? "" : _resourceLoader.UniqueName;
+                        return SelectedCategory==null || _pictosCollection.IsUniquePicto(SelectedCategory.Key, PictoName, PictoKey) ? "" : _resourceLoader.UniqueName;
                     }
 
                 case "PictoImage":
@@ -248,12 +249,14 @@ namespace PictoUI.ViewModels
             }
         }
 
+        public string PictoKey { get; set; }
+
         public string PictoSound
         {
             get { return _pictoSound; }
             set
             {
-                _pictoSound = value;
+                _pictoSound = value??"";
                 PictoMusic = String.IsNullOrEmpty(value) ? null : Base64Converter.ToStream(value);
                 OnPropertyChanged("PictoSound");
             }
@@ -313,7 +316,7 @@ namespace PictoUI.ViewModels
             var picto = await _pictosCollection.SavePicto(SelectedCategory, 
                 new Picto
                 {
-                    Key = _pictoKey,
+                    Key = PictoKey,
                     Text=PictoName, 
                     Image= PictoImage, 
                     Sound = PictoSound
@@ -322,8 +325,9 @@ namespace PictoUI.ViewModels
 
             PictoName = "";
             PictoImage = null;
-            PictoSound = null;
+            PictoSound = "";
             PictoBitmap = null;
+            PictoKey = null;
         }
         //admin
         public ICollection<Picto> Categories
@@ -370,14 +374,14 @@ namespace PictoUI.ViewModels
 
         public void LoadCategory()
         {
-            _categoryKey = _selectedCategory.Key;
+            CategoryKey = _selectedCategory.Key;
             CategoryName = _selectedCategory.Text;
             CategoryImage = _selectedCategory.Image;
         }
 
         public void LoadPicto()
         {
-            _pictoKey = _selectedPicto.Key;
+            PictoKey = _selectedPicto.Key;
             PictoName = _selectedPicto.Text;
             PictoImage = _selectedPicto.Image;
             PictoSound = _selectedPicto.Sound;

@@ -104,6 +104,28 @@ namespace PictoTest
         }
 
         [TestMethod]
+        public void save_picto_should_update_existing_picto_and_keep_children()
+        {
+            var parent = pictos.GetCategories().Result.Single(c => c.Key == "abstract");
+            var children = parent.Children.Count;
+            var modifidiedPicto = new Picto
+            {
+                Key = parent.Key,
+                Text = "test",
+                Image = parent.Image,
+                Sound = parent.Sound
+            };
+
+            pictos.SavePicto(null, modifidiedPicto).Wait();
+
+            var pictoCheck = new Pictos().GetCategories().Result.Single(c => c.Key == "abstract");
+            Assert.AreEqual("test", pictos.GetCategories().Result.Single(c => c.Key == "abstract").Text);
+            Assert.AreEqual("test", pictoCheck.Text);
+            Assert.AreEqual(children, pictos.GetCategories().Result.Single(c => c.Key == "abstract").Children.Count);
+            Assert.AreEqual(children, pictoCheck.Children.Count);
+        }
+
+        [TestMethod]
         public void delete_picto_should_delete_a_picto_from_collection()
         {
             var category = pictos.GetCategories().Result.First();

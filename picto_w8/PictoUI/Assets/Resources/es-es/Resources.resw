@@ -147,7 +147,7 @@
   <data name="DevelopedBy" xml:space="preserve">
     <value>Desarrollado por </value>
   </data>
-  <data name="DiscardButton1" xml:space="preserve">
+  <data name="DiscardButton" xml:space="preserve">
     <value>Descartar</value>
   </data>
   <data name="EditButton" xml:space="preserve">

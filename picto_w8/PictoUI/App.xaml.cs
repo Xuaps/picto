@@ -74,7 +74,7 @@ namespace PictoUI
         {
             try
             {
-                await EnsureShell(args.PreviousExecutionState);
+                EnsureShell(args.PreviousExecutionState);
                 var pictos = ViewModelLocator.Container.Resolve<IPictos>();
                 await new InitialDataService(pictos).LoadInitialData();
 
@@ -91,7 +91,7 @@ namespace PictoUI
             }
         }
 
-        private async Task EnsureShell(ApplicationExecutionState previousState)
+        private  void EnsureShell(ApplicationExecutionState previousState)
         {
             if (previousState == ApplicationExecutionState.Running)
             {

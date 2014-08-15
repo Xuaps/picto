@@ -71,10 +71,9 @@ namespace PictoUI.Model
         private async Task InsertPicto(Picto child, int? idParent)
         {
             var ins_name = await _db.PrepareStatementAsync(
-                @"  insert into names(key, language, value) values(?,?,?);");
+                @"insert into names(key, language, value) SELECT distinct ?, language, ? FROM names;");
             ins_name.BindTextParameterAt(1, child.Key);
-            ins_name.BindTextParameterAt(2, _culture);
-            ins_name.BindTextParameterAt(3, child.Text);
+            ins_name.BindTextParameterAt(2, child.Text);
 
             await ins_name.StepAsync().AsTask().ConfigureAwait(false);
 
@@ -98,7 +97,7 @@ namespace PictoUI.Model
         private async Task UpdatePicto(Picto child, int? idParent)
         {
             var ins_name = await _db.PrepareStatementAsync(
-                @"  update names SET value = ? WHERE language=? and key=?;");
+                @"update names SET value = ? WHERE language=? and key=?;");
             ins_name.BindTextParameterAt(3, child.Key);
             ins_name.BindTextParameterAt(2, _culture);
             ins_name.BindTextParameterAt(1, child.Text);
@@ -139,18 +138,17 @@ namespace PictoUI.Model
 
         private Picto UpdatePictoInList(Picto parent, Picto child)
         {
-            if (parent != null)
-            {
-                parent.Children.Remove(parent.Children.Single(c=>c.Key==child.Key));
-                parent.Children.Add(child);
-            }
-            else
-            {
-                _list.Remove(_list.Single(p => p.Key == child.Key));
-                _list.Add(child);
-            }
+            ICollection<Picto> list;
+            list = parent != null ? parent.Children : _list;
+            var original = list.Single(c => c.Key == child.Key);
+            
+            list.Remove(original);
+            original.Text = child.Text;
+            original.Sound = child.Sound;
+            original.Image = child.Image;
+            list.Add(original);
 
-            return child;
+            return original;
         }
         private async Task<ObservableCollection<Picto>> GetList()
         {

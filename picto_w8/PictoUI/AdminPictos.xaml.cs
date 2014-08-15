@@ -45,11 +45,13 @@ namespace PictoUI
             (DataContext as AdminPictosViewModel).CategoryImage = null;
             (DataContext as AdminPictosViewModel).CategoryName = null;
             (DataContext as AdminPictosViewModel).CategoryBitmap = null;
+            (DataContext as AdminPictosViewModel).CategoryKey = null;
 
             (DataContext as AdminPictosViewModel).PictoImage = null;
             (DataContext as AdminPictosViewModel).PictoName = null;
-            (DataContext as AdminPictosViewModel).PictoSound = null;
+            (DataContext as AdminPictosViewModel).PictoSound = "";
             (DataContext as AdminPictosViewModel).PictoBitmap = null;
+            (DataContext as AdminPictosViewModel).PictoKey = null;
         }
 
         private void ShowPopup(Popup popup)
@@ -69,7 +71,7 @@ namespace PictoUI
             ShowPopup(popAddCategory);
         }
 
-        private async void EditCategory(object sender, RoutedEventArgs e)
+        private void EditCategory(object sender, RoutedEventArgs e)
         {
             ShowPopup(popAddCategory);
             (DataContext as AdminPictosViewModel).LoadCategory();
@@ -82,13 +84,13 @@ namespace PictoUI
         }
 
         //picto
-        private async void AddPicto(object sender, RoutedEventArgs e)
+        private void AddPicto(object sender, RoutedEventArgs e)
         {
             ShowPopup(popAddPicto);
 //            Player.SetSource((DataContext as AdminPictosViewModel).PictoMusic, "");
         }
 
-        private async void EditPicto(object sender, RoutedEventArgs e)
+        private void EditPicto(object sender, RoutedEventArgs e)
         {
             ShowPopup(popAddPicto);
             (DataContext as AdminPictosViewModel).LoadPicto();

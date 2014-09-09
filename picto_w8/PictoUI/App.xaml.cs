@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
+using BugSense;
+using BugSense.Core.Model;
+using BugSense.Model;
 using PictoUI.Common;
 using PictoUI.Messaging;
 using PictoUI.Model;
@@ -33,30 +36,20 @@ namespace PictoUI
         /// </summary>
         public App()
         {
+            BugSenseHandler.Instance.InitAndStartSession(new ExceptionManager(Current), "w8c4a705");
             this.InitializeComponent();
             this.Suspending += OnSuspending;
-            UnhandledException += OnUnhandledException;
-        }
-
-        private void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
-        {
-            e.Handled = true;
-            OnUnhandledException(e.Exception);
+            //UnhandledException += OnUnhandledException;
         }
 
         public async void OnUnhandledException(Exception exception)
         {
             var dispatcher = App.Dispatcher;
+            BugSenseHandler.Instance.LogException(exception, "Picto", exception.Message);
             await dispatcher.RunAsync(CoreDispatcherPriority.Normal, (DispatchedHandler)(async () =>
             {
 #if DEBUG
-                var baseEx = exception.GetBaseException();
-                var message = exception.Message;
-                if (baseEx != exception)
-                {
-                    message += "\r\n\r\n" + baseEx.Message;
-                }
-                await ViewModelLocator.DialogService.ShowMessageAsync(message);
+                await ViewModelLocator.DialogService.ShowMessageAsync(exception.Message);
 #else
                 await ViewModelLocator.DialogService.ShowResourceMessageAsync("Exception_UnhandledException");
                 Exit();

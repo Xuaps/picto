@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest">
-  <Identity Name="46192XuapsLabs.Picto" Publisher="CN=4A4A6510-9495-4476-8ABA-E3B5E70D6296" Version="1.2.0.6" />
+  <Identity Name="46192XuapsLabs.Picto" Publisher="CN=4A4A6510-9495-4476-8ABA-E3B5E70D6296" Version="2.1.0.0" />
   <Properties>
     <DisplayName>Picto</DisplayName>
     <PublisherDisplayName>Xuaps</PublisherDisplayName>
@@ -33,4 +33,7 @@
       </m2:VisualElements>
     </Application>
   </Applications>
+  <Capabilities>
+    <Capability Name="internetClient" />
+  </Capabilities>
 </Package>

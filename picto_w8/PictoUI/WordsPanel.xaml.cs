@@ -1,4 +1,6 @@
 ﻿using System;
+using Windows.UI.Xaml;
+using BugSense;
 using PictoUI.Common;
 using PictoUI.Model;
 using Windows.UI.Xaml.Controls;
@@ -48,8 +50,16 @@ namespace PictoUI
                 var picto = (sentence.Items[index] as Picto);
                 
                 if(String.IsNullOrEmpty(picto.Sound)){
-                    SpeechSynthesisStream stream = await synth.SynthesizeTextToStreamAsync(picto.Text);
-                    player.SetSource(stream, stream.ContentType);
+                    try
+                    {
+                        SpeechSynthesisStream stream = await synth.SynthesizeTextToStreamAsync(picto.Text);
+                        player.SetSource(stream, stream.ContentType);
+                    }
+                    catch (System.UnauthorizedAccessException)
+                    {
+                        App.ViewModelLocator.DialogService.ShowResourceMessageAsync("SpeechSynthesisError");
+                        BugSenseHandler.Instance.LogEvent("SpeechSynthesisError");
+                    }
                 }else
                 {
                     player.SetSource(Base64Converter.ToStream(picto.Sound),"");

@@ -15,7 +15,7 @@
     <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <PackageCertificateKeyFile>PictoUI_StoreKey.pfx</PackageCertificateKeyFile>
     <ExpressionBlendVersion>5.0.30709.0</ExpressionBlendVersion>
-    <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
+    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
     <PackageCertificateThumbprint>3C974532028D08ADA4F39DF7E7E5A228D2249358</PackageCertificateThumbprint>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>

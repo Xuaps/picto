@@ -125,6 +125,11 @@ namespace PictoUI.Common
             get { return _resourceLoader.GetString("PictosBy"); }
         }
 
+        public string SpeechSynthesisError
+        {
+            get { return _resourceLoader.GetString("SpeechSynthesisError"); }
+        }
+
         public Uri ContactUsUri
         {
             get { return new Uri(_resourceLoader.GetString("ContactUsUri")); }

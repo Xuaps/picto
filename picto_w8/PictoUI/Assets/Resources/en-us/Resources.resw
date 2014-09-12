@@ -198,4 +198,7 @@
   <data name="Exception_UnhandledException" xml:space="preserve">
     <value>This program has encountered a problem and will now be closed.</value>
   </data>
+  <data name="SpeechSynthesisError" xml:space="preserve">
+    <value>There is a well know bug in some versions of Windows with speech synthesis. You can find more info here: http://bit.ly/SpeechSynthesisError.</value>
+  </data>
 </root>

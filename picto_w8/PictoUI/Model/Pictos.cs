@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Windows.Storage;
 using PictoUI.Common;
@@ -24,10 +25,19 @@ namespace PictoUI.Model
 
         public async Task Initialize()
         {
-            await _db.OpenAsync();
+            try
+            {
+                await _db.OpenAsync();
+            }
+            catch (COMException ex)
+            {
+                var result = Database.GetSqliteErrorCode(ex.HResult);
+                throw new Exception("Open database failed with error " + result);
+
+            }
 
             _list = new ObservableCollection<Picto>();
-            var stmt = await _db.PrepareStatementAsync(
+            var stmt = await PrepareStatementAsync(
                 @"select pictos.id as Id, pictos.key as Key, names.value as Text, pictos.image as Image, 
                             pictos.sound as Sound, pictos.id_parent as Parent  from pictos
                             left outer join names on names.key = pictos.key and names.language=?
@@ -70,14 +80,13 @@ namespace PictoUI.Model
 
         private async Task InsertPicto(Picto child, int? idParent)
         {
-            var ins_name = await _db.PrepareStatementAsync(
-                @"insert into names(key, language, value) SELECT distinct ?, language, ? FROM names;");
+            var ins_name = await PrepareStatementAsync(@"insert into names(key, language, value) SELECT distinct ?, language, ? FROM names;");
             ins_name.BindTextParameterAt(1, child.Key);
             ins_name.BindTextParameterAt(2, child.Text);
 
             await ins_name.StepAsync().AsTask().ConfigureAwait(false);
 
-            var ins_picto = await _db.PrepareStatementAsync(
+            var ins_picto = await PrepareStatementAsync(
                 @"insert into pictos (key, image, id_parent, sound) VALUES(?, ?,?,?);");
             ins_picto.BindTextParameterAt(1, child.Key);
             ins_picto.BindTextParameterAt(2, child.Image);
@@ -91,12 +100,12 @@ namespace PictoUI.Model
                 ins_picto.BindNullParameterAt(3);
             }
             await ins_picto.StepAsync().AsTask().ConfigureAwait(false);
-            child.Id = (int) _db.GetLastInsertedRowId();
+            child.Id = (int) GetLastInsertedRowId();
         }
 
         private async Task UpdatePicto(Picto child, int? idParent)
         {
-            var ins_name = await _db.PrepareStatementAsync(
+            var ins_name = await PrepareStatementAsync(
                 @"update names SET value = ? WHERE language=? and key=?;");
             ins_name.BindTextParameterAt(3, child.Key);
             ins_name.BindTextParameterAt(2, _culture);
@@ -104,7 +113,7 @@ namespace PictoUI.Model
 
             await ins_name.StepAsync().AsTask().ConfigureAwait(false);
 
-            var ins_picto = await _db.PrepareStatementAsync(
+            var ins_picto = await PrepareStatementAsync(
                 @"update pictos set image = ?, sound = ? WHERE id_parent= ? and key = ?;");
             ins_picto.BindTextParameterAt(4, child.Key);
             ins_picto.BindTextParameterAt(1, child.Image);
@@ -118,8 +127,10 @@ namespace PictoUI.Model
                 ins_picto.BindNullParameterAt(3);
             }
             await ins_picto.StepAsync().AsTask().ConfigureAwait(false);
-            child.Id = (int)_db.GetLastInsertedRowId();
+            child.Id = GetLastInsertedRowId();
         }
+
+        
 
         private Picto AddPictoToList(Picto parent, Picto child)
         {
@@ -173,7 +184,7 @@ namespace PictoUI.Model
         {
             (await GetList()).Remove(selectedCategory);
             
-            var stm = await _db.PrepareStatementAsync("DELETE FROM PICTOS WHERE id_parent=:id or id=:id;");
+            var stm = await PrepareStatementAsync("DELETE FROM PICTOS WHERE id_parent=:id or id=:id;");
             stm.BindIntParameterWithName(":id", selectedCategory.Id);
             await stm.StepAsync();
         }
@@ -182,7 +193,7 @@ namespace PictoUI.Model
         {
             (await GetCategory(selectedCategory.Key)).Children.Remove(selectedPicto);
 
-            var stm = await _db.PrepareStatementAsync("DELETE FROM PICTOS WHERE id_parent=? and id=?;");
+            var stm = await PrepareStatementAsync("DELETE FROM PICTOS WHERE id_parent=? and id=?;");
             stm.BindIntParameterAt(1, selectedCategory.Id);
             stm.BindIntParameterAt(2, selectedPicto.Id);
             await stm.StepAsync();
@@ -202,6 +213,32 @@ namespace PictoUI.Model
                 return true;
             
             return GetList().Result.Single(f => f.Key == categoryKey).Children.All(p=>p.Text!=pictoName || p.Key==pictoKey);
+        }
+
+        private async Task<Statement> PrepareStatementAsync(string statement)
+        {
+            try
+            {
+                return await _db.PrepareStatementAsync(statement);
+            }
+            catch (COMException ex)
+            {
+                var result = Database.GetSqliteErrorCode(ex.HResult);
+                throw new Exception("Prepare statement failed with error " + result);
+            }
+        }
+
+        private int GetLastInsertedRowId()
+        {
+            try
+            {
+                return (int)_db.GetLastInsertedRowId();
+            }
+            catch (COMException ex)
+            {
+                var result = Database.GetSqliteErrorCode(ex.HResult);
+                throw new Exception("Get last inserted row id failed with error " + result);
+            }
         }
     }
 }

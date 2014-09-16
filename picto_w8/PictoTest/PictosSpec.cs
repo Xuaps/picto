@@ -74,7 +74,7 @@ namespace PictoTest
         public void save_picto_should_add_new_picto_to_collection()
         {
             var category = pictos.GetCategories().Result.First();
-            var file = Base64Converter.FromStorageFile(Package.Current.InstalledLocation.GetFileAsync("assets\\logo.jpg").AsTask().Result).Result;
+            var file = Base64Converter.FromStorageFile(Package.Current.InstalledLocation.GetFileAsync("assets\\logo.scale-100.jpg").AsTask().Result).Result;
 
             pictos.SavePicto(category, new Picto{Text="juarrrr", Image=file, Sound = ""}).Wait();
 
